@@ -1,0 +1,4350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Find the perfect UAE credit card. Compare cashback, travel rewards, airline miles, annual fees and eligibility across dozens of verified UAE credit cards from Emirates NBD, FAB, ADCB, Mashreq, HSBC and more.">
+<title>CardGulf — UAE Credit Card Discovery</title>
+<style>
+/* ========================================================================
+   CARDGULF — LUXURY FINTECH CINEMA
+   A layered design system: tokens → atmosphere → surfaces → objects → UI
+======================================================================== */
+
+/* ── DESIGN TOKENS ───────────────────────────────────────────────────── */
+:root {
+  /* Surfaces */
+  --navy: #060a14;
+  --navy-mid: #0b1120;
+  --navy-light: #141d33;
+  --navy-card: #101828;
+  --navy-elevated: #16213a;
+
+  /* Brand */
+  --gold: #c9a84c;
+  --gold-light: #e9cf82;
+  --gold-dim: #8a6f30;
+  --gold-rgb: 201,168,76;
+  --teal: #12c4ac;
+  --teal-light: #5fe3d1;
+  --teal-dim: #0a7d6d;
+  --teal-rgb: 18,196,172;
+
+  /* Neutrals */
+  --white: #ffffff;
+  --text: #eaeef7;
+  --text-dim: #8d97ac;
+  --text-faint: #5c6478;
+
+  /* Borders / glow */
+  --border: rgba(255,255,255,0.08);
+  --border-soft: rgba(255,255,255,0.05);
+  --border-gold: rgba(201,168,76,0.32);
+  --border-teal: rgba(18,196,172,0.32);
+  --glow-gold: rgba(201,168,76,0.35);
+  --glow-teal: rgba(18,196,172,0.35);
+
+  /* Shadow / depth */
+  --shadow-sm: 0 8px 24px rgba(0,0,0,0.35);
+  --shadow-md: 0 24px 60px rgba(0,0,0,0.45);
+  --shadow-lg: 0 40px 120px rgba(0,0,0,0.55);
+  --shadow-gold: 0 20px 60px rgba(201,168,76,0.22);
+  --shadow-teal: 0 20px 60px rgba(18,196,172,0.2);
+
+  /* Radius scale */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+
+  /* Spacing scale */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px;
+
+  /* Motion tokens — spring-like cubic-beziers, never plain "ease" */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft-spring: cubic-bezier(0.22, 1.2, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.22s;
+  --dur-med: 0.45s;
+  --dur-slow: 0.75s;
+
+  /* Z-index hierarchy */
+  --z-bg: 0;
+  --z-content: 1;
+  --z-nav: 100;
+  --z-cursor: 60;
+  --z-compare: 500;
+  --z-modal: 2000;
+
+  /* Typography scale */
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Georgia', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--navy);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: rgba(var(--gold-rgb), 0.3); color: var(--white); }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--navy-mid); }
+::-webkit-scrollbar-thumb { background: var(--navy-light); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+h1,h2,h3,h4,h5,h6 { line-height: 1.15; font-weight: 700; font-family: var(--font-sans); }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 4px; }
+
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ── ATMOSPHERE — LAYERED BACKGROUND SYSTEM ─────────────────────────── */
+.atmosphere {
+  position: fixed; inset: 0; z-index: var(--z-bg);
+  pointer-events: none; overflow: hidden;
+}
+.atmosphere-base {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% -10%, rgba(20,29,51,0.9) 0%, transparent 55%),
+    var(--navy);
+}
+.aurora { position: absolute; inset: -20%; filter: blur(90px); opacity: 0.55; will-change: transform; }
+.aurora-gold {
+  width: 70vw; height: 70vw; left: -10%; top: -10%;
+  background: radial-gradient(circle, rgba(var(--gold-rgb),0.16) 0%, transparent 65%);
+  animation: auroraDrift1 34s ease-in-out infinite;
+}
+.aurora-teal {
+  width: 60vw; height: 60vw; right: -15%; top: 10%;
+  background: radial-gradient(circle, rgba(var(--teal-rgb),0.14) 0%, transparent 65%);
+  animation: auroraDrift2 40s ease-in-out infinite;
+}
+.aurora-soft {
+  width: 50vw; height: 50vw; left: 20%; bottom: -20%;
+  background: radial-gradient(circle, rgba(var(--gold-rgb),0.08) 0%, transparent 70%);
+  animation: auroraDrift3 46s ease-in-out infinite;
+}
+@keyframes auroraDrift1 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(6%,8%) scale(1.08); }
+  66% { transform: translate(-4%,4%) scale(0.96); }
+}
+@keyframes auroraDrift2 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  40% { transform: translate(-8%,6%) scale(1.05); }
+  70% { transform: translate(3%,-6%) scale(0.98); }
+}
+@keyframes auroraDrift3 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(5%,-8%) scale(1.1); }
+}
+.atmosphere-grid {
+  position: absolute; inset: 0; opacity: 0.035;
+  background-image: linear-gradient(rgba(234,238,247,0.6) 1px, transparent 1px),
+                     linear-gradient(90deg, rgba(234,238,247,0.6) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 0%, transparent 75%);
+}
+#particleCanvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.5; }
+.cursor-glow {
+  position: fixed; width: 480px; height: 480px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--teal-rgb),0.06) 0%, rgba(var(--gold-rgb),0.03) 40%, transparent 70%);
+  transform: translate(-50%,-50%);
+  pointer-events: none; z-index: var(--z-cursor); will-change: transform;
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.cursor-glow.active { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media (max-width: 768px) {
+  .aurora { filter: blur(60px); opacity: 0.4; }
+  #particleCanvas { display: none; }
+  .cursor-glow { display: none; }
+}
+
+/* ── SHARED KEYFRAMES ─────────────────────────────────────────────────*/
+@keyframes fadeInUp { from { opacity:0; transform:translateY(24px);} to { opacity:1; transform:translateY(0);} }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes scaleIn { from { opacity:0; transform:scale(0.94);} to { opacity:1; transform:scale(1);} }
+@keyframes pulseDot { 0%,100% { opacity:1; transform:scale(1);} 50% { opacity:0.5; transform:scale(0.8);} }
+@keyframes shimmerSweep { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+@keyframes floatCard { 0%,100% { transform: translateY(0) rotate(var(--rot,0deg)); } 50% { transform: translateY(-14px) rotate(calc(var(--rot,0deg) * -0.6)); } }
+@keyframes ringSpin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+@keyframes ringSpinRev { from { transform: rotate(360deg);} to { transform: rotate(0deg);} }
+@keyframes checkPop { 0% { transform: scale(0.3); opacity:0; } 60% { transform: scale(1.15); opacity:1; } 100% { transform: scale(1); } }
+@keyframes stepDone { 0% { transform: scale(0.8); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+.reveal { opacity: 0; transform: translateY(28px); filter: blur(3px); transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out), filter var(--dur-slow) var(--ease-out); }
+.reveal.revealed { opacity: 1; transform: translateY(0); filter: blur(0); }
+.reveal-scale { opacity: 0; transform: scale(0.94); transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out); }
+.reveal-scale.revealed { opacity: 1; transform: scale(1); }
+.stagger > * { transition-delay: calc(var(--i, 0) * 60ms); }
+
+/* ── NAVIGATION ───────────────────────────────────────────────────────*/
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav);
+  padding: 0 40px; height: 76px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: transparent; border-bottom: 1px solid transparent;
+  transition: background var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out),
+              height var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+  transform: translateY(-100%);
+  animation: navEnter 0.7s var(--ease-out) 0.15s forwards;
+}
+@keyframes navEnter { to { transform: translateY(0); } }
+.nav.scrolled {
+  height: 66px;
+  background: rgba(6,10,20,0.72);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+.nav-brand { display: flex; align-items: center; gap: 11px; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+.nav-brand-icon {
+  width: 34px; height: 34px; border-radius: 9px; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, var(--gold), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 900; color: var(--navy); font-family: var(--font-display);
+  box-shadow: 0 4px 16px rgba(var(--gold-rgb),0.3);
+}
+.nav-brand span { color: var(--gold); }
+.nav-links { display: flex; align-items: center; gap: 8px; }
+.nav-links a:not(.nav-cta) {
+  position: relative; font-size: 0.875rem; color: var(--text-dim); font-weight: 500;
+  padding: 8px 14px; border-radius: 8px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.nav-links a:not(.nav-cta)::after {
+  content: ''; position: absolute; left: 14px; right: 14px; bottom: 4px; height: 1.5px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  transform: scaleX(0); transform-origin: left; transition: transform var(--dur-med) var(--ease-spring);
+}
+.nav-links a:not(.nav-cta):hover { color: var(--white); }
+.nav-links a:not(.nav-cta):hover::after { transform: scaleX(1); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--navy); padding: 9px 20px; border-radius: 8px;
+  font-size: 0.85rem; font-weight: 700; margin-left: 8px;
+  box-shadow: 0 4px 16px rgba(var(--gold-rgb),0.25);
+  transition: transform var(--dur-fast) var(--ease-spring), box-shadow var(--dur-fast) var(--ease-out);
+}
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(var(--gold-rgb),0.4); }
+.nav-mobile-btn { display: none; background: none; border: none; cursor: pointer; color: var(--text); padding: 8px; }
+
+/* ── HERO ─────────────────────────────────────────────────────────────*/
+.hero {
+  min-height: 100vh; display: flex; align-items: center; position: relative;
+  overflow: hidden; padding: 130px 40px 90px;
+}
+.hero-inner {
+  max-width: 1240px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 60px; align-items: center;
+  position: relative; z-index: 1;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: rgba(var(--gold-rgb),0.08); border: 1px solid var(--border-gold);
+  padding: 7px 15px 7px 12px; border-radius: 20px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+  color: var(--gold-light); text-transform: uppercase;
+  opacity: 0; animation: fadeInUp 0.7s var(--ease-out) 0.5s forwards;
+}
+.hero-eyebrow::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal); box-shadow: 0 0 10px var(--teal);
+  animation: pulseDot 2s infinite;
+}
+.hero h1 { font-family: var(--font-display); font-weight: 600; margin: 22px 0 22px; overflow: hidden; }
+.hero h1 .line { display: block; overflow: hidden; }
+.hero h1 .line span {
+  display: block; font-size: clamp(2.5rem, 4.4vw, 3.9rem); line-height: 1.08; letter-spacing: -0.02em;
+  transform: translateY(110%); animation: lineReveal 0.9s var(--ease-out) forwards;
+}
+.hero h1 .line:nth-child(1) span { animation-delay: 0.62s; }
+.hero h1 .line:nth-child(2) span { animation-delay: 0.74s; }
+@keyframes lineReveal { to { transform: translateY(0); } }
+.hero h1 em {
+  font-style: italic; font-weight: 500;
+  background: linear-gradient(115deg, var(--gold-light), var(--teal-light) 65%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero p {
+  font-size: 1.12rem; color: var(--text-dim); max-width: 500px; line-height: 1.7;
+  margin-bottom: 38px; opacity: 0; animation: fadeInUp 0.8s var(--ease-out) 0.95s forwards;
+}
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeInUp 0.8s var(--ease-out) 1.08s forwards; }
+
+.btn-primary, .btn-secondary {
+  position: relative; display: inline-flex; align-items: center; gap: 9px;
+  padding: 16px 30px; border-radius: var(--r-sm);
+  font-size: 0.95rem; font-weight: 700; border: none; cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-spring), box-shadow var(--dur-med) var(--ease-out);
+  isolation: isolate; overflow: hidden;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold) 60%, var(--gold-dim));
+  color: var(--navy); box-shadow: 0 10px 32px rgba(var(--gold-rgb),0.32), inset 0 1px 0 rgba(255,255,255,0.35);
+}
+.btn-primary::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%);
+  background-size: 250% 100%; background-position: 150% 0;
+  transition: background-position 0.7s var(--ease-out);
+}
+.btn-primary:hover::before { background-position: -50% 0; }
+.btn-primary:hover { transform: translateY(-3px) scale(1.015); box-shadow: 0 16px 44px rgba(var(--gold-rgb),0.45), inset 0 1px 0 rgba(255,255,255,0.4); }
+.btn-primary:active { transform: translateY(-1px) scale(0.99); }
+.btn-secondary {
+  background: rgba(255,255,255,0.03); color: var(--text);
+  border: 1px solid var(--border); backdrop-filter: blur(6px);
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.18); transform: translateY(-3px); }
+.btn-secondary:active { transform: translateY(-1px); }
+
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 50px; padding-top: 34px;
+  border-top: 1px solid var(--border);
+  opacity: 0; animation: fadeInUp 0.8s var(--ease-out) 1.22s forwards;
+}
+.hero-stat-num {
+  font-family: var(--font-display); font-size: 1.9rem; font-weight: 600;
+  background: linear-gradient(135deg, var(--white), var(--gold-light));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero-stat-label { font-size: 0.78rem; color: var(--text-faint); margin-top: 3px; }
+
+/* ── HERO CARD STAGE (3D) ─────────────────────────────────────────────*/
+.hero-right {
+  position: relative; height: 520px; perspective: 1600px;
+  opacity: 0; animation: fadeIn 1.1s var(--ease-out) 0.9s forwards;
+}
+.card-stage { position: absolute; inset: 0; transform-style: preserve-3d; }
+.card-visual {
+  position: absolute; width: 300px; height: 186px; border-radius: 20px;
+  padding: 22px 26px; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: space-between;
+  transform-style: preserve-3d; will-change: transform;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
+  transition: box-shadow 0.4s var(--ease-out);
+}
+.card-visual::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(circle 180px at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.16), transparent 60%);
+  opacity: 0; transition: opacity 0.25s;
+}
+.card-visual:hover::after { opacity: 1; }
+.card-visual::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.12) 32%, transparent 44%);
+  background-size: 220% 220%; background-position: 140% 0;
+  animation: cardSweep 7s ease-in-out infinite;
+}
+.card-visual-1 { background: linear-gradient(135deg, #1a3a5c 0%, #0d2844 100%); top: 40px; left: 10px; z-index: 3; --rot: -4deg; animation: floatCard 7s ease-in-out infinite; }
+.card-visual-2 { background: linear-gradient(135deg, #241a3d 0%, #180f2e 100%); top: 165px; left: 145px; z-index: 2; --rot: 4deg; animation: floatCard 8s ease-in-out infinite 0.6s; }
+.card-visual-3 { background: linear-gradient(135deg, #0d2a2a 0%, #143838 100%); top: 300px; left: 30px; z-index: 1; --rot: -3deg; animation: floatCard 9s ease-in-out infinite 1.2s; }
+@keyframes cardSweep { 0%,55% { background-position: 140% 0; } 75% { background-position: -40% 0; } 100% { background-position: -40% 0; } }
+.card-chip {
+  width: 36px; height: 27px; border-radius: 5px;
+  background: linear-gradient(135deg, var(--gold-dim), var(--gold-light));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.3);
+}
+.card-bank { font-size: 0.64rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.12em; font-family: var(--font-mono); }
+.card-name { font-size: 0.88rem; font-weight: 700; color: rgba(255,255,255,0.94); margin-top: 2px; }
+.card-number { font-size: 0.72rem; color: rgba(255,255,255,0.32); letter-spacing: 0.18em; font-family: var(--font-mono); margin-top: 6px; }
+.card-stripe {
+  height: 3px; border-radius: 2px; margin-top: 10px; width: 60%;
+  background: linear-gradient(90deg, var(--gold), var(--teal), var(--gold));
+  background-size: 200% auto; animation: shimmerSweep 3.5s linear infinite;
+}
+.card-badge {
+  position: absolute; top: -9px; right: -9px;
+  background: var(--teal); color: var(--navy);
+  padding: 5px 11px; border-radius: 12px;
+  font-size: 0.63rem; font-weight: 700; white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(var(--teal-rgb),0.4);
+}
+@media (max-width: 900px) { .hero-inner { grid-template-columns: 1fr; } .hero-right { display: none; } }
+
+/* ── SECTIONS ─────────────────────────────────────────────────────────*/
+.section { padding: 110px 40px; position: relative; }
+.section-inner { max-width: 1220px; margin: 0 auto; position: relative; z-index: 1; }
+.section-header { text-align: center; margin-bottom: 64px; }
+.section-eyebrow {
+  display: inline-block; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal-light);
+  margin-bottom: 14px; font-family: var(--font-mono);
+}
+.section-title { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.9rem, 3.1vw, 2.7rem); letter-spacing: -0.01em; margin-bottom: 16px; }
+.section-title span { font-style: italic; background: linear-gradient(115deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.section-desc { color: var(--text-dim); font-size: 1.06rem; max-width: 560px; margin: 0 auto; }
+
+/* ── QUIZ SECTION ─────────────────────────────────────────────────────*/
+.quiz-section { position: relative; overflow: hidden; }
+.quiz-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 55% at 50% 45%, rgba(var(--teal-rgb),0.05) 0%, transparent 70%);
+}
+.quiz-container {
+  max-width: 720px; margin: 0 auto; position: relative; z-index: 1;
+  background: linear-gradient(180deg, rgba(22,32,55,0.7), rgba(16,24,40,0.75));
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 52px 52px 44px;
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.04);
+  backdrop-filter: blur(24px);
+  overflow: hidden;
+}
+.quiz-container::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+  background: linear-gradient(140deg, rgba(var(--gold-rgb),0.35), transparent 30%, transparent 70%, rgba(var(--teal-rgb),0.3));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events: none; opacity: 0.7;
+}
+.quiz-container::after {
+  content: ''; position: absolute; width: 340px; height: 340px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--gold-rgb),0.08), transparent 70%);
+  top: -140px; right: -100px; pointer-events: none; filter: blur(10px);
+}
+
+.quiz-progress { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+.quiz-step-num {
+  font-family: var(--font-mono); font-size: 0.85rem; color: var(--gold-light); font-weight: 600;
+  white-space: nowrap; display: flex; align-items: baseline; gap: 2px; min-width: 52px;
+}
+.quiz-step-num .cur { display: inline-block; transition: transform 0.35s var(--ease-spring), opacity 0.3s; }
+.quiz-progress-bar {
+  flex: 1; height: 3px; background: var(--navy-light); border-radius: 2px; overflow: visible; position: relative;
+}
+.quiz-progress-fill {
+  height: 100%; border-radius: 2px; position: relative;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  box-shadow: 0 0 12px rgba(var(--teal-rgb),0.5);
+  transition: width 0.6s var(--ease-soft-spring);
+}
+.quiz-progress-fill::after {
+  content: ''; position: absolute; right: -3px; top: 50%; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold-light); transform: translateY(-50%);
+  box-shadow: 0 0 10px 3px rgba(var(--gold-rgb),0.6);
+}
+.quiz-step-label { font-size: 0.78rem; color: var(--text-faint); white-space: nowrap; font-family: var(--font-mono); }
+
+.quiz-question-wrap { position: relative; }
+.quiz-question-inner { animation: qEnter 0.5s var(--ease-soft-spring) both; }
+.quiz-question-inner.leaving { animation: qLeave 0.28s var(--ease-in-out) both; }
+@keyframes qEnter { from { opacity: 0; transform: translateX(26px) scale(0.98); } to { opacity: 1; transform: translateX(0) scale(1); } }
+@keyframes qLeave { from { opacity: 1; transform: translateX(0) scale(1); } to { opacity: 0; transform: translateX(-22px) scale(0.97); } }
+
+.quiz-question { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
+.quiz-subtitle { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 30px; }
+
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.quiz-options.single-col { grid-template-columns: 1fr; }
+.quiz-option {
+  position: relative; display: flex; align-items: center; gap: 13px;
+  padding: 15px 18px; border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  cursor: pointer; transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-spring);
+  font-size: 0.9rem; color: var(--text); font-weight: 500;
+  overflow: hidden; isolation: isolate;
+  opacity: 0; transform: translateY(10px);
+  animation: optIn 0.45s var(--ease-out) forwards;
+  animation-delay: calc(var(--i,0) * 45ms + 60ms);
+}
+@keyframes optIn { to { opacity: 1; transform: translateY(0); } }
+.quiz-option::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; z-index: -1;
+  background: radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(var(--teal-rgb),0.14), transparent 65%);
+  opacity: 0; transition: opacity 0.25s;
+}
+.quiz-option:hover { border-color: rgba(var(--teal-rgb),0.4); transform: translateY(-2px); }
+.quiz-option:hover::before { opacity: 1; }
+.quiz-option.selected {
+  border-color: var(--teal); background: rgba(var(--teal-rgb),0.09); color: var(--white);
+  box-shadow: 0 0 0 1px rgba(var(--teal-rgb),0.25), 0 10px 26px rgba(var(--teal-rgb),0.14);
+  animation: optIn 0.45s var(--ease-out) forwards, selectBloom 0.5s var(--ease-out);
+}
+@keyframes selectBloom { 0% { background-color: rgba(var(--teal-rgb),0.32); } 100% { background-color: rgba(var(--teal-rgb),0.09); } }
+.quiz-option-icon { font-size: 1.15rem; flex-shrink: 0; transition: transform 0.3s var(--ease-spring); }
+.quiz-option.selected .quiz-option-icon { transform: scale(1.15); }
+.quiz-option-check {
+  margin-left: auto; width: 21px; height: 21px; border-radius: 50%;
+  border: 2px solid var(--border); flex-shrink: 0;
+  transition: all 0.25s var(--ease-spring); display: flex; align-items: center; justify-content: center;
+}
+.quiz-option.selected .quiz-option-check { background: var(--teal); border-color: var(--teal); animation: checkPop 0.4s var(--ease-spring); }
+.quiz-option.selected .quiz-option-check::after { content: '✓'; color: var(--navy); font-size: 0.68rem; font-weight: 900; }
+
+.salary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.salary-option {
+  padding: 17px 20px; border-radius: var(--r-sm); position: relative; isolation: isolate; overflow: hidden;
+  border: 1px solid var(--border); background: rgba(255,255,255,0.02);
+  cursor: pointer; transition: all var(--dur-fast) var(--ease-out); text-align: center;
+  opacity: 0; transform: translateY(10px); animation: optIn 0.45s var(--ease-out) forwards;
+  animation-delay: calc(var(--i,0) * 45ms + 60ms);
+}
+.salary-option::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; z-index: -1;
+  background: radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(var(--gold-rgb),0.14), transparent 65%);
+  opacity: 0; transition: opacity 0.25s;
+}
+.salary-option:hover { border-color: rgba(var(--gold-rgb),0.4); transform: translateY(-2px); }
+.salary-option:hover::before { opacity: 1; }
+.salary-option.selected { border-color: var(--gold); background: rgba(var(--gold-rgb),0.1); box-shadow: 0 10px 26px rgba(var(--gold-rgb),0.16); }
+.salary-option-amount { font-size: 1.02rem; font-weight: 700; color: var(--white); }
+.salary-option-label { font-size: 0.76rem; color: var(--text-dim); margin-top: 3px; }
+
+.quiz-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 34px; }
+.quiz-btn-back {
+  background: none; border: none; color: var(--text-faint); cursor: pointer;
+  font-size: 0.875rem; display: flex; align-items: center; gap: 6px;
+  transition: color var(--dur-fast) var(--ease-out); padding: 8px 4px;
+}
+.quiz-btn-back svg { transition: transform 0.25s var(--ease-spring); }
+.quiz-btn-back:hover { color: var(--white); }
+.quiz-btn-back:hover svg { transform: translateX(-3px); }
+.quiz-btn-next {
+  position: relative; overflow: hidden; isolation: isolate;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--navy); border: none; cursor: pointer;
+  padding: 13px 30px; border-radius: var(--r-sm);
+  font-size: 0.9rem; font-weight: 700;
+  transition: all 0.3s var(--ease-spring); display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 8px 24px rgba(var(--gold-rgb),0.25);
+}
+.quiz-btn-next svg { transition: transform 0.25s var(--ease-spring); }
+.quiz-btn-next:not(:disabled):hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 14px 36px rgba(var(--gold-rgb),0.4); }
+.quiz-btn-next:not(:disabled):hover svg { transform: translateX(3px); }
+.quiz-btn-next.ready { animation: readyPulse 1.6s ease-in-out infinite; }
+@keyframes readyPulse { 0%,100% { box-shadow: 0 8px 24px rgba(var(--gold-rgb),0.25); } 50% { box-shadow: 0 8px 30px rgba(var(--gold-rgb),0.5); } }
+.quiz-btn-next:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── MATCHING ENGINE LOADER ──────────────────────────────────────────*/
+.quiz-loading { text-align: center; padding: 30px 10px 10px; animation: fadeIn 0.4s var(--ease-out); }
+.match-engine { position: relative; width: 172px; height: 172px; margin: 0 auto 30px; }
+.match-engine-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 1.5px solid transparent;
+  border-top-color: rgba(var(--teal-rgb),0.55);
+  border-right-color: rgba(var(--teal-rgb),0.15);
+  animation: ringSpin 3.2s linear infinite;
+}
+.match-engine-ring.r2 {
+  inset: 18px; border-top-color: rgba(var(--gold-rgb),0.5); border-right-color: transparent;
+  animation: ringSpinRev 4.6s linear infinite;
+}
+.match-engine-ring.r3 { inset: 36px; border: 1px dashed rgba(255,255,255,0.12); animation: ringSpin 12s linear infinite; }
+.match-engine-core {
+  position: absolute; inset: 54px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(var(--gold-rgb),0.35), rgba(var(--teal-rgb),0.18) 60%, transparent 80%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 40px rgba(var(--teal-rgb),0.25);
+  font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; color: var(--gold-light);
+}
+.match-engine-node {
+  position: absolute; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--teal-light); box-shadow: 0 0 8px var(--teal-light);
+  animation: nodeOrbit 4s linear infinite;
+}
+@keyframes nodeOrbit { from { transform: rotate(0deg) translateX(86px) rotate(0deg); } to { transform: rotate(360deg) translateX(86px) rotate(-360deg); } }
+.quiz-loading-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; margin-bottom: 6px; }
+.quiz-loading-sub { font-size: 0.875rem; color: var(--text-dim); margin-bottom: 30px; }
+.loading-steps { list-style: none; text-align: left; max-width: 380px; margin: 0 auto; display: flex; flex-direction: column; gap: 4px; }
+.loading-step {
+  display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 10px;
+  font-size: 0.85rem; color: var(--text-faint); transition: all 0.35s var(--ease-out);
+}
+.loading-step-dot {
+  width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+  border: 1.5px solid var(--border); position: relative; transition: all 0.3s var(--ease-out);
+}
+.loading-step.active { color: var(--text); background: rgba(var(--teal-rgb),0.06); }
+.loading-step.active .loading-step-dot { border-color: var(--teal); }
+.loading-step.active .loading-step-dot::after {
+  content: ''; position: absolute; inset: 3px; border-radius: 50%; background: var(--teal);
+  animation: pulseDot 1s infinite;
+}
+.loading-step.done { color: var(--text-dim); }
+.loading-step.done .loading-step-dot { border-color: var(--teal); background: var(--teal); animation: stepDone 0.4s var(--ease-spring); }
+.loading-step.done .loading-step-dot::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: var(--navy); font-weight: 900; }
+
+/* ── RESULTS ──────────────────────────────────────────────────────────*/
+.results-header { text-align: center; margin-bottom: 34px; }
+.results-title { font-family: var(--font-display); font-size: 1.55rem; font-weight: 600; margin: 14px 0 6px; opacity:0; animation: fadeInUp 0.6s var(--ease-out) 0.15s forwards; }
+.results-subtitle { font-size: 0.9rem; color: var(--text-dim); opacity:0; animation: fadeInUp 0.6s var(--ease-out) 0.25s forwards; }
+
+.result-card {
+  border-radius: var(--r-lg); padding: 26px 28px; margin-bottom: 16px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  opacity: 0; transform: translateY(24px) scale(0.98);
+  animation: matchReveal 0.6s var(--ease-out) forwards;
+  transition: border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+@keyframes matchReveal { to { opacity: 1; transform: translateY(0) scale(1); } }
+.result-card:hover { border-color: rgba(255,255,255,0.16); transform: translateY(-2px); }
+.result-card.top-pick {
+  position: relative; isolation: isolate; overflow: hidden;
+  background: linear-gradient(160deg, rgba(var(--gold-rgb),0.09), rgba(var(--teal-rgb),0.05));
+  border: 1px solid rgba(var(--gold-rgb),0.45);
+  box-shadow: var(--shadow-gold), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.result-card.top-pick::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; z-index: -1;
+  background: conic-gradient(from var(--ang,0deg), var(--gold), transparent 30%, var(--teal) 55%, transparent 80%, var(--gold));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: borderSpin 6s linear infinite;
+}
+@keyframes borderSpin { to { --ang: 360deg; } }
+@property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.best-match-badge {
+  position: absolute; top: 18px; right: -34px; transform: rotate(35deg);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--navy); font-size: 0.62rem; font-weight: 800; letter-spacing: 0.08em;
+  padding: 4px 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.result-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; gap: 12px; }
+.result-card-rank { display: flex; align-items: center; gap: 14px; }
+.rank-badge {
+  width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
+  background: linear-gradient(135deg, rgba(var(--gold-rgb),0.22), rgba(var(--teal-rgb),0.14));
+  border: 1px solid var(--border-gold); color: var(--gold-light);
+}
+.match-score { text-align: right; }
+.match-pct { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; color: var(--gold-light); line-height: 1; }
+.top-pick .match-pct { font-size: 2.1rem; background: linear-gradient(135deg, var(--gold-light), var(--teal-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.match-label { font-size: 0.68rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+.result-card-body { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; padding: 14px 0; border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); }
+.result-info-label { font-size: 0.65rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; }
+.result-info-value { font-size: 0.85rem; font-weight: 700; color: var(--white); margin-top: 2px; }
+.result-benefits { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.benefit-tag { font-size: 0.68rem; padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.04); color: var(--text-dim); border: 1px solid var(--border-soft); }
+.why-match { margin-bottom: 18px; }
+.why-match-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); margin-bottom: 8px; }
+.why-match-items { display: flex; flex-direction: column; gap: 5px; }
+.why-match-item {
+  font-size: 0.8rem; color: var(--text-dim); display: flex; gap: 8px; align-items: baseline;
+  opacity: 0; transform: translateX(-8px); animation: whyIn 0.4s var(--ease-out) forwards;
+  animation-delay: calc(var(--wi,0) * 110ms);
+}
+@keyframes whyIn { to { opacity: 1; transform: translateX(0); } }
+.why-match-item.pro { color: var(--text); }
+.result-card-actions { display: flex; gap: 10px; }
+.btn-view {
+  flex: 1; padding: 12px 16px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  color: var(--text); font-weight: 600; font-size: 0.85rem; cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+.btn-view:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+.btn-apply {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 12px 16px; border-radius: var(--r-sm);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--navy); font-weight: 700; font-size: 0.85rem; border: none; cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-spring); box-shadow: 0 6px 18px rgba(var(--gold-rgb),0.22);
+}
+.btn-apply:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(var(--gold-rgb),0.35); }
+
+/* ── HOW IT WORKS ─────────────────────────────────────────────────────*/
+.how-section { background: linear-gradient(180deg, transparent, rgba(255,255,255,0.012), transparent); }
+.steps-grid { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.steps-line {
+  position: absolute; top: 26px; left: 12.5%; right: 12.5%; height: 1px;
+  background: var(--border); z-index: 0; overflow: hidden;
+}
+.steps-line-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--teal), var(--gold)); transition: width 1.4s var(--ease-out); }
+.step-card {
+  position: relative; z-index: 1;
+  background: var(--navy-card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 30px 24px;
+  text-align: center; transition: all var(--dur-med) var(--ease-out);
+}
+.step-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.12); box-shadow: var(--shadow-sm); }
+.step-number {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--navy-mid);
+  border: 1px solid var(--border-gold);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 18px;
+  font-size: 1.1rem; font-weight: 700; color: var(--gold-light); font-family: var(--font-display);
+  transition: all 0.4s var(--ease-spring);
+}
+.step-card.active .step-number { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(var(--gold-rgb),0.12); transform: scale(1.08); }
+.step-icon { font-size: 1.5rem; margin-bottom: 12px; }
+.step-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+.step-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.65; }
+@media (max-width: 768px) { .steps-line { display: none; } }
+
+/* ── CATEGORY / BANK CARDS ────────────────────────────────────────────*/
+.categories-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.cat-card {
+  position: relative; isolation: isolate; overflow: hidden;
+  background: var(--navy-card); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 22px 16px;
+  cursor: pointer; transition: all var(--dur-fast) var(--ease-out); text-align: center;
+}
+.cat-card::before {
+  content:''; position:absolute; inset:0; z-index:-1; opacity:0; transition: opacity 0.3s;
+  background: radial-gradient(160px circle at 50% 0%, rgba(var(--teal-rgb),0.14), transparent 70%);
+}
+.cat-card:hover { transform: translateY(-4px); border-color: rgba(var(--teal-rgb),0.35); }
+.cat-card:hover::before { opacity: 1; }
+.cat-card:hover .cat-icon { transform: scale(1.15) rotate(-4deg); }
+.cat-icon { font-size: 1.8rem; margin-bottom: 10px; display: inline-block; transition: transform 0.3s var(--ease-spring); }
+.cat-name { font-size: 0.85rem; font-weight: 700; }
+.cat-count { font-size: 0.7rem; color: var(--text-faint); margin-top: 4px; transition: color 0.3s; }
+.cat-card:hover .cat-count { color: var(--teal-light); }
+
+.banks-section { background: linear-gradient(180deg, transparent, rgba(255,255,255,0.012), transparent); }
+.banks-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.bank-card {
+  background: var(--navy-card); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 20px 14px;
+  text-align: center; cursor: pointer; transition: all var(--dur-fast) var(--ease-out);
+}
+.bank-card:hover { border-color: rgba(var(--gold-rgb),0.4); transform: translateY(-4px); box-shadow: var(--shadow-sm); }
+.bank-logo {
+  width: 46px; height: 46px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px; font-size: 0.62rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--white); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+}
+.bank-name { font-size: 0.74rem; font-weight: 600; margin-bottom: 4px; }
+.bank-cards { font-size: 0.64rem; color: var(--text-faint); }
+
+/* ── FILTERS / DISCOVERY ─────────────────────────────────────────────*/
+.filters-panel { margin-bottom: 34px; }
+.filters-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.filter-search {
+  width: 100%; padding: 14px 18px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  color: var(--text); font-size: 0.9rem; transition: all var(--dur-fast) var(--ease-out);
+}
+.filter-search:focus { border-color: var(--teal); background: rgba(255,255,255,0.035); box-shadow: 0 0 0 3px rgba(var(--teal-rgb),0.12); outline: none; }
+.filter-group { min-width: 150px; }
+.filter-label { font-size: 0.68rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.filter-select {
+  width: 100%; padding: 12px 14px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  color: var(--text); font-size: 0.85rem; cursor: pointer; transition: all var(--dur-fast) var(--ease-out);
+}
+.filter-select:focus { border-color: var(--teal); outline: none; }
+.filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-chip {
+  padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border); color: var(--text-dim);
+  cursor: pointer; transition: all var(--dur-fast) var(--ease-spring);
+}
+.filter-chip:hover { border-color: rgba(255,255,255,0.2); color: var(--white); transform: translateY(-1px); }
+.filter-chip.active { background: rgba(var(--teal-rgb),0.12); border-color: var(--teal); color: var(--teal-light); }
+.filter-result-count { font-size: 0.78rem; color: var(--text-faint); margin-top: 14px; }
+
+/* ── CARD GRID ─────────────────────────────────────────────────────────*/
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.card-item {
+  position: relative; isolation: isolate; overflow: hidden;
+  background: var(--navy-card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 22px; cursor: pointer;
+  transform-style: preserve-3d; will-change: transform;
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.card-item::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; opacity: 0;
+  background: radial-gradient(260px circle at var(--mx,50%) var(--my,50%), rgba(var(--teal-rgb),0.1), transparent 60%);
+  transition: opacity 0.3s;
+}
+.card-item:hover { border-color: rgba(255,255,255,0.16); box-shadow: var(--shadow-md); }
+.card-item:hover::before { opacity: 1; }
+.card-item.flying { transition: none; }
+.card-item-bank { font-size: 0.68rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; font-family: var(--font-mono); }
+.card-item-name { font-size: 0.98rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.card-item-mini {
+  height: 118px; border-radius: 12px; padding: 16px 18px; margin-bottom: 18px;
+  position: relative; overflow: hidden; display: flex; align-items: flex-end;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+.card-mini-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 55%),
+              repeating-linear-gradient(115deg, transparent 0 8px, rgba(255,255,255,0.015) 8px 9px);
+}
+.card-mini-chip { width: 26px; height: 19px; border-radius: 4px; background: linear-gradient(135deg, var(--gold-dim), var(--gold-light)); margin-bottom: 8px; opacity: 0.9; }
+.card-mini-num { font-size: 0.7rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.4); font-family: var(--font-mono); }
+.card-item-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.card-spec-label { font-size: 0.63rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; }
+.card-spec-value { font-size: 0.8rem; font-weight: 600; color: var(--white); margin-top: 1px; }
+.card-item-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.card-tag { padding: 3px 9px; border-radius: 12px; font-size: 0.65rem; font-weight: 600; }
+.tag-cashback { background: rgba(var(--gold-rgb),0.12); color: var(--gold-light); }
+.tag-travel { background: rgba(var(--teal-rgb),0.12); color: var(--teal-light); }
+.tag-miles { background: rgba(100,149,237,0.12); color: #7ea8f2; }
+.tag-dining { background: rgba(255,107,107,0.12); color: #ff8a8a; }
+.tag-free { background: rgba(78,205,196,0.12); color: #6fe0d6; }
+.tag-premium { background: rgba(var(--gold-rgb),0.16); color: var(--gold-light); }
+.tag-islamic { background: rgba(46,213,115,0.12); color: #4fe08c; }
+.tag-shopping { background: rgba(255,159,67,0.12); color: #ffb066; }
+.card-highlight {
+  font-size: 0.75rem; color: var(--teal-light); margin-bottom: 16px; padding: 9px 12px;
+  background: rgba(var(--teal-rgb),0.06); border-radius: 8px; border: 1px solid rgba(var(--teal-rgb),0.16);
+}
+.card-item-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid var(--border-soft); }
+.card-compare-btn {
+  font-size: 0.76rem; color: var(--text-dim); background: none; border: none;
+  cursor: pointer; transition: all var(--dur-fast) var(--ease-out); display: flex; align-items: center; gap: 4px;
+}
+.card-compare-btn:hover { color: var(--white); }
+.card-compare-btn.added { color: var(--teal-light); }
+.card-apply-mini {
+  font-size: 0.76rem; font-weight: 700; color: var(--gold-light);
+  background: rgba(var(--gold-rgb),0.08); border: 1px solid var(--border-gold);
+  padding: 6px 13px; border-radius: 7px; cursor: pointer; transition: all var(--dur-fast) var(--ease-out);
+}
+.card-apply-mini:hover { background: rgba(var(--gold-rgb),0.16); transform: translateX(2px); }
+.cards-empty { grid-column: 1/-1; text-align: center; padding: 70px; color: var(--text-dim); font-size: 1rem; }
+.card-item.filtered-out { animation: cardOut 0.32s var(--ease-in-out) forwards; }
+.card-item.filtered-in { animation: cardIn 0.4s var(--ease-out) both; }
+@keyframes cardOut { to { opacity: 0; transform: scale(0.9); } }
+@keyframes cardIn { from { opacity: 0; transform: scale(0.94) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+/* ── FLYING CLONE (fly-to-compare) ────────────────────────────────────*/
+.fly-clone {
+  position: fixed; z-index: 3000; pointer-events: none; border-radius: var(--r-md);
+  box-shadow: var(--shadow-lg); transition: all 0.62s var(--ease-in-out);
+  opacity: 0.95;
+}
+
+/* ── COMPARE BAR ──────────────────────────────────────────────────────*/
+.compare-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: var(--z-compare);
+  background: rgba(16,24,40,0.85); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-gold);
+  padding: 16px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
+  transform: translateY(110%); transition: transform 0.5s var(--ease-out);
+}
+.compare-bar.visible { transform: translateY(0); }
+.compare-slots { display: flex; gap: 10px; }
+.compare-slot {
+  width: 122px; height: 46px; border: 1px dashed var(--border); border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; color: var(--text-faint); transition: all 0.3s var(--ease-spring);
+}
+.compare-slot.filled {
+  background: rgba(var(--teal-rgb),0.08); border: 1px solid rgba(var(--teal-rgb),0.32); border-style: solid;
+  color: var(--teal-light); font-size: 0.64rem; font-weight: 600; text-align: center; padding: 4px;
+  animation: slotFill 0.4s var(--ease-spring);
+}
+@keyframes slotFill { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.compare-slot-remove { cursor: pointer; color: var(--text-dim); margin-left: 4px; }
+.compare-actions { display: flex; gap: 12px; align-items: center; }
+.compare-count { font-size: 0.8rem; color: var(--text-dim); font-family: var(--font-mono); }
+.btn-compare {
+  background: linear-gradient(135deg, var(--teal-light), var(--teal));
+  color: var(--navy); padding: 11px 26px; border-radius: 9px;
+  font-size: 0.875rem; font-weight: 700; border: none; cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-spring); box-shadow: 0 6px 20px rgba(var(--teal-rgb),0.25);
+}
+.btn-compare:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+.btn-compare:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(var(--teal-rgb),0.4); }
+.btn-clear-compare { background: none; border: none; color: var(--text-faint); cursor: pointer; font-size: 0.8rem; transition: color var(--dur-fast); }
+.btn-clear-compare:hover { color: var(--white); }
+
+/* ── COMPARISON TABLE ─────────────────────────────────────────────────*/
+.comparison-section { display: none; padding: 70px 40px; }
+.comparison-section.visible { display: block; animation: fadeIn 0.4s var(--ease-out); }
+.comparison-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--navy-card); border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); }
+.comparison-table th { background: var(--navy-elevated); padding: 20px; text-align: center; font-size: 0.8rem; font-weight: 700; border-bottom: 1px solid var(--border); position: sticky; top: 76px; }
+.comparison-table th:first-child { text-align: left; min-width: 160px; }
+.comparison-table td { padding: 15px 20px; border-bottom: 1px solid var(--border-soft); font-size: 0.85rem; text-align: center; vertical-align: middle; }
+.comparison-table td:first-child { text-align: left; color: var(--text-dim); font-size: 0.8rem; }
+.comparison-table tr:last-child td { border-bottom: none; }
+.comparison-winner { background: rgba(var(--teal-rgb),0.07); color: var(--teal-light); font-weight: 700; position: relative; }
+.comparison-winner::before { content: '✓'; display: inline-block; margin-right: 4px; font-size: 0.7rem; }
+
+/* ── DETAIL MODAL ─────────────────────────────────────────────────────*/
+.modal-overlay {
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  background: rgba(4,6,13,0); backdrop-filter: blur(0px);
+  display: none; align-items: center; justify-content: center;
+  padding: 40px; overflow-y: auto;
+  transition: background 0.4s var(--ease-out), backdrop-filter 0.4s var(--ease-out);
+}
+.modal-overlay.visible { display: flex; background: rgba(4,6,13,0.88); backdrop-filter: blur(10px); }
+.modal {
+  background: var(--navy-mid); border: 1px solid var(--border);
+  border-radius: var(--r-xl); max-width: 780px; width: 100%;
+  max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+  position: relative; transform: translateY(40px) scale(0.96); opacity: 0;
+  transition: transform 0.45s var(--ease-out), opacity 0.4s var(--ease-out);
+}
+.modal-overlay.visible .modal { transform: translateY(0) scale(1); opacity: 1; }
+.modal-close { position: sticky; top: 0; z-index: 10; display: flex; justify-content: flex-end; padding: 20px 20px 0; }
+.modal-close-btn {
+  background: var(--navy-light); border: none; color: var(--text-dim);
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+  font-size: 1.05rem; display: flex; align-items: center; justify-content: center;
+  transition: all var(--dur-fast) var(--ease-spring);
+}
+.modal-close-btn:hover { color: var(--white); background: var(--navy-card); transform: rotate(90deg); }
+.modal-body { padding: 0 42px 42px; }
+.modal-card-visual {
+  width: 100%; height: 172px; border-radius: var(--r-md);
+  display: flex; align-items: flex-end; padding: 22px 30px;
+  margin-bottom: 30px; position: relative; overflow: hidden; perspective: 800px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+}
+.modal-card-visual::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(125deg, rgba(255,255,255,0.14), transparent 45%);
+}
+.modal-card-stripe { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--teal), var(--gold)); background-size: 200% auto; animation: shimmerSweep 3.5s linear infinite; }
+.modal-chip { width: 42px; height: 32px; border-radius: 5px; background: linear-gradient(135deg, var(--gold-dim), var(--gold-light)); opacity: 0.9; margin-bottom: 6px; }
+.modal-card-bank { font-size: 0.75rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--font-mono); }
+.modal-card-name { font-size: 1.15rem; font-weight: 800; color: rgba(255,255,255,0.95); }
+.modal-card-network { position: absolute; right: 30px; bottom: 22px; font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+.modal-verified { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 24px; background: rgba(255,255,255,0.03); padding: 5px 11px; border-radius: 6px; }
+.modal-section-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); margin-bottom: 14px; margin-top: 30px; display: flex; align-items: center; gap: 8px; }
+.modal-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.modal-specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+.modal-spec { background: var(--navy-card); border-radius: 10px; padding: 15px; border: 1px solid var(--border); transition: border-color 0.25s; }
+.modal-spec:hover { border-color: rgba(255,255,255,0.16); }
+.modal-spec-label { font-size: 0.65rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.modal-spec-value { font-size: 1rem; font-weight: 700; color: var(--white); }
+.modal-benefits { display: flex; flex-direction: column; gap: 8px; }
+.modal-benefit { display: flex; align-items: flex-start; gap: 12px; padding: 13px 15px; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-soft); }
+.modal-benefit-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; color: var(--teal-light); }
+.modal-benefit-text { font-size: 0.875rem; color: var(--text); line-height: 1.5; }
+.pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.pros-box, .cons-box { border-radius: 12px; padding: 18px; border: 1px solid; }
+.pros-box { background: rgba(var(--teal-rgb),0.05); border-color: rgba(var(--teal-rgb),0.22); }
+.cons-box { background: rgba(255,100,100,0.04); border-color: rgba(255,100,100,0.16); }
+.pros-cons-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.pros-box .pros-cons-title { color: var(--teal-light); }
+.cons-box .pros-cons-title { color: #ff8a8a; }
+.pros-cons-list { list-style: none; }
+.pros-cons-list li { font-size: 0.8rem; color: var(--text-dim); padding: 4px 0; display: flex; gap: 8px; align-items: flex-start; }
+.pros-cons-list li::before { flex-shrink: 0; margin-top: 2px; }
+.pros-box li::before { content: '✓'; color: var(--teal-light); font-weight: 700; }
+.cons-box li::before { content: '×'; color: #ff8a8a; font-weight: 700; }
+.modal-disclaimer { margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.02); border-radius: 10px; font-size: 0.75rem; color: var(--text-dim); line-height: 1.65; border: 1px solid var(--border-soft); }
+.modal-cta { display: flex; gap: 12px; margin-top: 30px; }
+.modal-apply-btn {
+  flex: 1; padding: 15px 24px; border-radius: var(--r-sm);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--navy); font-size: 1rem; font-weight: 700; border: none; cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-spring); display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 8px 24px rgba(var(--gold-rgb),0.24);
+}
+.modal-apply-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(var(--gold-rgb),0.4); }
+.modal-official-btn {
+  padding: 15px 20px; border-radius: var(--r-sm); background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.875rem; font-weight: 600; cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out); white-space: nowrap; display: flex; align-items: center; gap: 6px;
+}
+.modal-official-btn:hover { border-color: rgba(255,255,255,0.24); color: var(--white); }
+
+/* ── TRUST ────────────────────────────────────────────────────────────*/
+.trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.trust-card {
+  background: var(--navy-card); border: 1px solid var(--border); border-radius: var(--r-md); padding: 30px;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+.trust-card:hover { border-color: rgba(var(--gold-rgb),0.28); transform: translateY(-3px); }
+.trust-icon { font-size: 1.5rem; margin-bottom: 16px; }
+.trust-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+.trust-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.65; }
+.disclaimer-box {
+  margin-top: 26px; padding: 20px 26px; background: rgba(var(--gold-rgb),0.04);
+  border: 1px solid var(--border-gold); border-radius: var(--r-md);
+  font-size: 0.8rem; color: var(--text-dim); line-height: 1.7; max-width: 820px; margin-left: auto; margin-right: auto;
+}
+
+/* ── FAQ ──────────────────────────────────────────────────────────────*/
+.faq-list { max-width: 780px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 4px; background: none; border: none; color: var(--white);
+  font-size: 0.96rem; font-weight: 600; cursor: pointer; text-align: left; gap: 16px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.faq-q:hover { color: var(--gold-light); }
+.faq-item.open .faq-q { color: var(--gold-light); }
+.faq-arrow {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid var(--border); display: flex; align-items: center;
+  justify-content: center; transition: all 0.35s var(--ease-spring); font-size: 0.7rem;
+}
+.faq-item.open .faq-arrow { transform: rotate(180deg); border-color: var(--gold); color: var(--gold-light); background: rgba(var(--gold-rgb),0.08); }
+.faq-a-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s var(--ease-in-out); }
+.faq-item.open .faq-a-wrap { grid-template-rows: 1fr; }
+.faq-a-inner { overflow: hidden; }
+.faq-a { font-size: 0.88rem; color: var(--text-dim); line-height: 1.75; padding-bottom: 22px; padding-right: 30px; }
+
+/* ── FOOTER CTA ───────────────────────────────────────────────────────*/
+.footer-cta {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, rgba(var(--gold-rgb),0.05), var(--navy) 60%);
+  border-top: 1px solid var(--border-gold);
+  padding: 100px 40px; text-align: center;
+}
+.footer-cta::before {
+  content: ''; position: absolute; width: 60vw; height: 60vw; border-radius: 50%; left: 50%; top: -30vw; transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(var(--teal-rgb),0.08), transparent 70%); pointer-events: none;
+}
+.footer-cta h2 { position: relative; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.9rem, 3.2vw, 2.8rem); letter-spacing: -0.01em; margin-bottom: 16px; }
+.footer-cta p { position: relative; color: var(--text-dim); font-size: 1rem; max-width: 480px; margin: 0 auto 36px; }
+
+/* ── FOOTER ───────────────────────────────────────────────────────────*/
+.footer { background: var(--navy-mid); border-top: 1px solid var(--border); padding: 44px 40px; }
+.footer-inner { max-width: 1220px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+.footer-brand { font-size: 0.9rem; font-weight: 700; }
+.footer-brand span { color: var(--gold-light); }
+.footer-disclaimer { font-size: 0.75rem; color: var(--text-faint); max-width: 600px; line-height: 1.65; }
+.footer-links { display: flex; gap: 22px; }
+.footer-links a { font-size: 0.75rem; color: var(--text-dim); transition: color var(--dur-fast); }
+.footer-links a:hover { color: var(--white); }
+
+/* ── UTILITIES ────────────────────────────────────────────────────────*/
+.hidden { display: none !important; }
+.text-gold { color: var(--gold-light); }
+.text-teal { color: var(--teal-light); }
+.text-dim { color: var(--text-dim); }
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px; font-size: 0.68rem; font-weight: 700; }
+.badge-new { background: rgba(var(--teal-rgb),0.15); color: var(--teal-light); border: 1px solid rgba(var(--teal-rgb),0.3); }
+
+/* ── MOBILE ───────────────────────────────────────────────────────────*/
+@media (max-width: 900px) {
+  .categories-grid { grid-template-columns: repeat(3, 1fr); }
+  .banks-grid { grid-template-columns: repeat(3, 1fr); }
+  .cards-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-mobile-btn { display: flex; }
+  .hero { padding: 110px 20px 60px; }
+  .hero h1 .line span { font-size: clamp(2rem, 8vw, 2.6rem); }
+  .hero-stats { gap: 22px; flex-wrap: wrap; }
+  .section { padding: 70px 20px; }
+  .quiz-container { padding: 32px 22px; }
+  .quiz-options { grid-template-columns: 1fr; }
+  .salary-grid { grid-template-columns: 1fr 1fr; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr 1fr; }
+  .categories-grid { grid-template-columns: 1fr 1fr; }
+  .banks-grid { grid-template-columns: 1fr 1fr; }
+  .trust-grid { grid-template-columns: 1fr; }
+  .modal-body { padding: 0 20px 30px; }
+  .modal-specs { grid-template-columns: 1fr 1fr; }
+  .result-card-body { grid-template-columns: 1fr 1fr; }
+  .pros-cons { grid-template-columns: 1fr; }
+  .comparison-table { font-size: 0.75rem; }
+  .compare-bar { padding: 14px 20px; flex-direction: column; gap: 12px; align-items: stretch; }
+  .compare-slots { overflow-x: auto; }
+  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+  .filters-row { flex-direction: column; }
+  .modal-cta { flex-direction: column; }
+  .modal-overlay { padding: 10px; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+  .card-visual, .cat-card:hover, .card-item:hover, .bank-card:hover { transform: none; }
+}
+@media (max-width: 480px) {
+  .banks-grid { grid-template-columns: 1fr 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .modal-specs { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ATMOSPHERE / BACKGROUND SYSTEM -->
+<div class="atmosphere" aria-hidden="true">
+  <div class="atmosphere-base"></div>
+  <div class="aurora aurora-gold"></div>
+  <div class="aurora aurora-teal"></div>
+  <div class="aurora aurora-soft"></div>
+  <div class="atmosphere-grid"></div>
+  <canvas id="particleCanvas"></canvas>
+</div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-brand">
+    <div class="nav-brand-icon">C</div>
+    Card<span>Gulf</span>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#find" onclick="scrollToSection('quiz')">Find My Card</a>
+    <a href="#browse" onclick="scrollToSection('browse')">Browse All</a>
+    <a href="#compare" onclick="scrollToSection('compare')">Compare</a>
+    <a href="#how" onclick="scrollToSection('how')">How It Works</a>
+    <a href="#quiz" class="nav-cta" onclick="scrollToSection('quiz')">Get Started</a>
+  </div>
+  <button class="nav-mobile-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">UAE Credit Card Discovery</div>
+      <h1>
+        <span class="line"><span>Find the credit card</span></span>
+        <span class="line"><span>that's <em>actually right for you.</em></span></span>
+      </h1>
+      <p>Compare <span id="heroSubCount">40+</span> UAE credit cards by cashback, travel rewards, annual fees, and eligibility. Answer 5 quick questions and we'll find your best match in minutes.</p>
+      <div class="hero-actions">
+        <button class="btn-primary magnetic" onclick="scrollToSection('quiz')">
+          Find My Card
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button class="btn-secondary magnetic" onclick="scrollToSection('browse')">
+          Explore All Cards
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num num" id="heroCardCount">0</div>
+          <div class="hero-stat-label">UAE Credit Cards</div>
+        </div>
+        <div>
+          <div class="hero-stat-num num" id="heroBankCount">0</div>
+          <div class="hero-stat-label">Major UAE Banks</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">AED 5K</div>
+          <div class="hero-stat-label">Lowest Salary Req.</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right" id="heroRight">
+      <div class="card-stage" id="cardStage">
+        <div class="card-visual card-visual-1" data-tilt>
+          <div class="card-chip"></div>
+          <div>
+            <div class="card-bank">Emirates NBD</div>
+            <div class="card-name">Lulu 247 Titanium</div>
+            <div class="card-number">•••• •••• •••• 4721</div>
+            <div class="card-stripe"></div>
+          </div>
+          <div class="card-badge">7% at LuLu</div>
+        </div>
+        <div class="card-visual card-visual-2" data-tilt style="background: linear-gradient(135deg, #2a1f3d 0%, #1a0f2e 100%);">
+          <div class="card-chip"></div>
+          <div>
+            <div class="card-bank">First Abu Dhabi Bank</div>
+            <div class="card-name">Etihad Guest Infinite</div>
+            <div class="card-number">•••• •••• •••• 9830</div>
+            <div class="card-stripe"></div>
+          </div>
+          <div class="card-badge" style="background: #6495ed; color: white;">7 Miles/AED 10</div>
+        </div>
+        <div class="card-visual card-visual-3" data-tilt style="background: linear-gradient(135deg, #0d2035 0%, #1a3550 100%);">
+          <div class="card-chip"></div>
+          <div>
+            <div class="card-bank">Mashreq</div>
+            <div class="card-name">Cashback Credit Card</div>
+            <div class="card-number">•••• •••• •••• 1158</div>
+            <div class="card-stripe"></div>
+          </div>
+          <div class="card-badge" style="background: #4ecdc4; color: #0a0f1e;">Free for Life</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ SECTION -->
+<section class="section quiz-section" id="quiz">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Card Matcher</div>
+      <h2 class="section-title">Find your <span>perfect card</span></h2>
+      <p class="section-desc">Answer a few quick questions — we'll match you with the best UAE credit cards for your spending and lifestyle.</p>
+    </div>
+
+    <div class="quiz-container reveal-scale" id="quizContainer">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section" id="how">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Simple Process</div>
+      <h2 class="section-title">How <span>CardGulf</span> works</h2>
+    </div>
+    <div class="steps-grid" id="stepsGrid">
+      <div class="steps-line"><div class="steps-line-fill" id="stepsLineFill"></div></div>
+      <div class="step-card reveal">
+        <div class="step-icon">📝</div>
+        <div class="step-number">01</div>
+        <div class="step-title">Tell us about yourself</div>
+        <div class="step-desc">Answer 5 quick questions about your salary, spending habits, and what benefits matter most to you.</div>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-icon">🤖</div>
+        <div class="step-number">02</div>
+        <div class="step-title">We calculate your matches</div>
+        <div class="step-desc">Our algorithm scores <span id="quizStepCount">40+</span> UAE cards across eligibility, reward value, fees, and your specific preferences.</div>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-icon">🏆</div>
+        <div class="step-number">03</div>
+        <div class="step-title">See your top picks</div>
+        <div class="step-desc">Your personalised results show match scores, benefit breakdowns, and exactly why each card was ranked for you.</div>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-icon">🔗</div>
+        <div class="step-number">04</div>
+        <div class="step-title">Apply at the bank</div>
+        <div class="step-desc">Click Apply Now to go directly to the official UAE bank website. No middlemen, no affiliate redirects.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BROWSE BY CATEGORY -->
+<section class="section browse-section" id="categories">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Browse by Benefit</div>
+      <h2 class="section-title">What matters to <span>you</span>?</h2>
+    </div>
+    <div class="categories-grid" id="categoriesGrid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- POPULAR BANKS -->
+<section class="section banks-section" id="banks">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">UAE Banks</div>
+      <h2 class="section-title">Cards from <span>top UAE banks</span></h2>
+    </div>
+    <div class="banks-grid" id="banksGrid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- BROWSE ALL CARDS -->
+<section class="section browse-section" id="browse" style="padding-top: 60px;">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Full Database</div>
+      <h2 class="section-title">Browse <span>all UAE cards</span></h2>
+      <p class="section-desc"><span id="discoverySubCount">40+</span> verified UAE credit cards. Filter by bank, salary, annual fee, and benefits.</p>
+    </div>
+    <div class="filters-panel reveal">
+      <div class="filters-row">
+        <div style="flex:1;">
+          <input type="text" class="filter-search" id="cardSearch" placeholder="Search cards, banks, or benefits..." oninput="filterCards()">
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Bank</div>
+          <select class="filter-select" id="bankFilter" onchange="filterCards()">
+            <option value="">All Banks</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Min. Salary</div>
+          <select class="filter-select" id="salaryFilter" onchange="filterCards()">
+            <option value="">Any</option>
+            <option value="5000">AED 5,000+</option>
+            <option value="8000">AED 8,000+</option>
+            <option value="12000">AED 12,000+</option>
+            <option value="15000">AED 15,000+</option>
+            <option value="20000">AED 20,000+</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Annual Fee</div>
+          <select class="filter-select" id="feeFilter" onchange="filterCards()">
+            <option value="">Any</option>
+            <option value="0">Free for Life</option>
+            <option value="500">Under AED 500</option>
+            <option value="1000">Under AED 1,000</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Sort By</div>
+          <select class="filter-select" id="sortFilter" onchange="filterCards()">
+            <option value="match">Best Match</option>
+            <option value="fee_asc">Lowest Fee</option>
+            <option value="salary_asc">Lowest Salary</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-chips" id="filterChips">
+        <button class="filter-chip active" onclick="setCategoryFilter('')" data-cat="">All</button>
+        <button class="filter-chip" onclick="setCategoryFilter('cashback')" data-cat="cashback">💰 Cashback</button>
+        <button class="filter-chip" onclick="setCategoryFilter('travel')" data-cat="travel">✈️ Travel</button>
+        <button class="filter-chip" onclick="setCategoryFilter('miles')" data-cat="miles">🛫 Miles</button>
+        <button class="filter-chip" onclick="setCategoryFilter('dining')" data-cat="dining">🍽️ Dining</button>
+        <button class="filter-chip" onclick="setCategoryFilter('free')" data-cat="free">⭐ Free</button>
+        <button class="filter-chip" onclick="setCategoryFilter('islamic')" data-cat="islamic">☪️ Islamic</button>
+        <button class="filter-chip" onclick="setCategoryFilter('premium')" data-cat="premium">💎 Premium</button>
+        <button class="filter-chip" onclick="setCategoryFilter('lounge')" data-cat="lounge">🛋️ Lounge</button>
+      </div>
+      <div class="filter-result-count" id="filterResultCount"></div>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">
+      <!-- Rendered by JS -->
+    </div>
+
+    <div style="text-align:center; margin-top:40px; display:none;" id="loadMoreBtn">
+      <button class="btn-secondary" onclick="loadMore()" style="display:inline-flex;">
+        Load More Cards
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE SECTION -->
+<section class="comparison-section" id="compareSection">
+  <div class="section-inner">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+      <div>
+        <div class="section-eyebrow">Side-by-Side</div>
+        <h2 class="section-title">Card <span>Comparison</span></h2>
+      </div>
+      <button class="btn-secondary" onclick="closeComparison()" style="display:inline-flex;">Close</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="comparison-table" id="comparisonTable">
+        <!-- Rendered by JS -->
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST / HOW WE RANK -->
+<section class="section trust-section" id="trust">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Transparency</div>
+      <h2 class="section-title">How we <span>rank cards</span></h2>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card reveal">
+        <div class="trust-icon">🔍</div>
+        <div class="trust-title">Verified from official sources</div>
+        <div class="trust-desc">Every card is sourced directly from official UAE bank and card issuer websites. We never include cards that are discontinued, unavailable, or unverifiable.</div>
+      </div>
+      <div class="trust-card reveal">
+        <div class="trust-icon">⚖️</div>
+        <div class="trust-title">No sponsored rankings</div>
+        <div class="trust-desc">Our matching algorithm scores cards purely on how well they fit your profile. No bank pays to be ranked first. Your best match is determined by data, not advertising.</div>
+      </div>
+      <div class="trust-card reveal">
+        <div class="trust-icon">📅</div>
+        <div class="trust-title">Regularly updated</div>
+        <div class="trust-desc">UAE credit card benefits change frequently. Each card shows its last verified date and official source. Always confirm current terms directly with the bank before applying.</div>
+      </div>
+    </div>
+    <div class="disclaimer-box reveal">
+      <strong style="color:var(--gold-light);">Important Disclaimer:</strong> Card information is provided for comparison purposes only. Eligibility, fees, rewards, and benefits are subject to the issuer's terms and conditions and may change without notice. Always verify the latest information directly with the card issuer before applying. CardGulf is not a financial advisor. Approval is subject to the issuer's credit assessment. Eligibility is not guaranteed.
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-section" id="faq">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-title">Common <span>questions</span></h2>
+    </div>
+    <div class="faq-list" id="faqList">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="footer-cta">
+  <h2>Ready to find your card?</h2>
+  <p>Takes 2 minutes. No personal data collected. 100% free.</p>
+  <button class="btn-primary magnetic" onclick="scrollToSection('quiz')">
+    Start the Quiz
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </button>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">Card<span>Gulf</span> — UAE Credit Card Discovery</div>
+    <div class="footer-disclaimer">Card information last verified August 2026. For comparison purposes only. Always verify with the issuing bank before applying. Not financial advice.</div>
+    <div class="footer-links">
+      <a href="#trust">How We Rank</a>
+      <a href="#faq">FAQ</a>
+    </div>
+  </div>
+</footer>
+
+<!-- COMPARE BAR -->
+<div class="compare-bar" id="compareBar">
+  <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+    <span style="font-size:0.8rem; font-weight:700;">Compare Cards</span>
+    <div class="compare-slots" id="compareSlots"></div>
+  </div>
+  <div class="compare-actions">
+    <span class="compare-count" id="compareCount">0 of 4 selected</span>
+    <button class="btn-clear-compare" onclick="clearComparison()">Clear</button>
+    <button class="btn-compare" id="compareBtn" onclick="openComparison()" disabled>Compare Now</button>
+  </div>
+</div>
+
+<!-- CARD DETAIL MODAL -->
+<div class="modal-overlay" id="cardModal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-close">
+      <button class="modal-close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================
+   CARDGULF — DATA & APPLICATION LOGIC
+============================================ */
+
+// ── UAE CREDIT CARD DATABASE ──
+// Data sourced from official UAE bank websites (verified Aug 2026)
+// Sources: emiratesnbd.com, bankfab.com, adcb.com, mashreqbank.com,
+// hsbc.ae, emiratesislamic.ae, rakbank.ae, citibank.ae, cbd.ae, liv.me, wio.io
+
+const UAE_CARDS = [
+  {
+    id: 'mashreq-cashback',
+    bank: 'Mashreq',
+    name: 'Cashback Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #0e2a4a 0%, #1a3d5c 100%)',
+    categories: ['cashback', 'free', 'dining'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: '5% dining, 2% international, 1% local',
+    cashbackHighlight: '5% on dining',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.5,
+    bestFor: 'Everyday cashback, dining lovers',
+    welcomeBonus: 'AED 500 when spending AED 5,000 in first 2 months',
+    keyBenefits: [
+      '5% cashback on dining (local & international)',
+      '2% cashback on international spending',
+      '1% cashback on all other local spending',
+      'AED 100 monthly cashback cap (AED 1,000 total)',
+      'No annual fee, ever',
+      'AED 500 welcome bonus for new customers'
+    ],
+    drawbacks: [
+      'Reduced 0.33% on government, utilities, fuel',
+      'Monthly cashback cap of AED 1,000',
+      'Existing Mashreq customers: only AED 100 welcome bonus'
+    ],
+    officialUrl: 'https://www.mashreqbank.com/uae/en/personal/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'liv-cashback-plus',
+    bank: 'Liv',
+    name: 'Cashback+ Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #1a0e3d 0%, #2d1a5c 100%)',
+    categories: ['cashback', 'free', 'dining', 'fuel'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: '6% dining, 5% fuel, 3% groceries, 1% other',
+    cashbackHighlight: '6% dining & food delivery',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.4,
+    bestFor: 'Dining, food delivery, fuel, groceries',
+    welcomeBonus: 'Available for new Liv customers',
+    keyBenefits: [
+      '6% cashback on dining and food delivery apps',
+      '5% cashback on fuel',
+      '3% cashback on groceries',
+      '1% on general spending',
+      'AED 200 monthly cap per category',
+      'Convert cashback to Emirates Skywards Miles',
+      'Fully digital — apply via app'
+    ],
+    drawbacks: [
+      'AED 200 per-category monthly cap limits high spenders',
+      'Digital-only bank (some may prefer branch access)',
+      'Fuel cap may be limiting for heavy drivers'
+    ],
+    officialUrl: 'https://www.liv.me/en/campaign/2023/credit-card-liv',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'adcb-365-cashback',
+    bank: 'ADCB',
+    name: '365 Cashback Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #1c0a0a 0%, #2e1010 100%)',
+    categories: ['cashback', 'dining', 'fuel'],
+    minSalary: 10000,
+    annualFee: 300,
+    annualFeeNote: 'Waived with AED 12,000/month spend',
+    cashback: '6% dining, 5% fuel/Salik, 3% groceries',
+    cashbackHighlight: '6% dining + 5% Salik',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.3,
+    bestFor: 'High spenders, families, Salik users',
+    welcomeBonus: 'Bonus cashback on first spend',
+    keyBenefits: [
+      '6% cashback on all dining',
+      '5% on fuel and Salik top-ups',
+      '3% on groceries',
+      'Fee waived with AED 12,000 monthly spend',
+      'Buy-1-Get-1 VOX Cinema offers',
+      '20% off Talabat orders',
+      'Bonus TouchPoints for AED 10k+ monthly spend',
+      'TouchPoints redeemable for Skywards/Etihad Miles'
+    ],
+    drawbacks: [
+      'AED 300 annual fee if spend under AED 12,000/month',
+      'AED 10,000 minimum salary required',
+      'Caps apply per category'
+    ],
+    officialUrl: 'https://www.adcb.com/en/personal/cards/credit-cards/',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'fab-cashback',
+    bank: 'FAB',
+    name: 'Cashback Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #0a2510 0%, #0f3a18 100%)',
+    categories: ['cashback', 'dining', 'shopping'],
+    minSalary: 8000,
+    annualFee: 300,
+    annualFeeNote: 'Waivable with qualifying spend',
+    cashback: '5% grocery, dining, fashion; 3% international; 1% other',
+    cashbackHighlight: '5% on grocery, dining & fashion',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.2,
+    bestFor: 'Grocery shopping, fashion, dining',
+    welcomeBonus: 'Available for new applicants',
+    keyBenefits: [
+      '5% cashback at grocery stores',
+      '5% cashback on dining',
+      '5% cashback on fashion retail',
+      '3% cashback on international spending',
+      '1% on all other spending',
+      'Redemption as statement credit or cash'
+    ],
+    drawbacks: [
+      'AED 300 annual fee (waivable)',
+      'AED 8,000 minimum salary',
+      'Monthly caps on each category'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'wio-credit-card',
+    bank: 'Wio',
+    name: 'Wio Credit Card',
+    network: 'Visa',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #081c30 0%, #0d2a45 100%)',
+    categories: ['cashback', 'free'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free with Wio plan subscription',
+    cashback: '2% on all spending (flat rate, no caps)',
+    cashbackHighlight: '2% flat on everything',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.2,
+    bestFor: 'Simplicity seekers, international spenders',
+    welcomeBonus: 'Available at signup',
+    keyBenefits: [
+      '2% cashback on ALL spending — no category restrictions',
+      'No monthly or annual caps',
+      '0.5% on bill payments',
+      'Fully digital — apply via Wio app',
+      'Instant card issuance',
+      'Apple Pay & Google Pay'
+    ],
+    drawbacks: [
+      'Requires a Wio plan subscription',
+      'Lower rate than category-specific cards',
+      'Digital-only bank (some prefer branch access)',
+      'No lounge access or travel insurance'
+    ],
+    officialUrl: 'https://wio.io',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'citi-cashback',
+    bank: 'Citi UAE',
+    name: 'Cashback Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #0a1a2e 0%, #0d2542 100%)',
+    categories: ['cashback', 'lounge'],
+    minSalary: 8000,
+    annualFee: 300,
+    annualFeeNote: 'Free yr 2+ with AED 9,000 annual spend',
+    cashback: '3% international, 2% grocery, 1% other — no caps',
+    cashbackHighlight: '3% international, uncapped',
+    loungeAccess: true,
+    loungeVisits: 8,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.1,
+    bestFor: 'International spenders, uncapped cashback',
+    welcomeBonus: 'Statement credit for new applicants',
+    keyBenefits: [
+      '3% cashback on ALL non-AED (international) spending',
+      '2% cashback on supermarket purchases',
+      '1% on all other spending',
+      'Absolutely NO monthly or annual caps',
+      '8 complimentary airport lounge visits/year',
+      '20% off Talabat monthly',
+      '30% off 2 VOX Cinema tickets monthly',
+      'Auto cashback — no redemption needed'
+    ],
+    drawbacks: [
+      'AED 300 fee if spend under AED 9,000/year',
+      'No dining-specific bonus (treated as 1%)',
+      '8,000 AED minimum salary'
+    ],
+    officialUrl: 'https://www.citibank.ae/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'citi-simplicity',
+    bank: 'Citi UAE',
+    name: 'Simplicity Credit Card',
+    network: 'Mastercard',
+    tier: 'Entry',
+    gradient: 'linear-gradient(135deg, #101820 0%, #1a2a38 100%)',
+    categories: ['free'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: 'No cashback — rewards via points',
+    cashbackHighlight: 'No late fees, no cash advance fee',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.0,
+    bestFor: 'First-time cardholders, credit builders',
+    welcomeBonus: 'None',
+    keyBenefits: [
+      'ZERO late payment fees — unique in UAE',
+      'ZERO cash advance fees',
+      'ZERO over-limit fees',
+      'Free for life — no annual fee',
+      'Easy instalment payment plan',
+      'Free supplementary cards for family',
+      'Lowest-risk card for beginners'
+    ],
+    drawbacks: [
+      'No cashback rewards',
+      'No lounge access or travel benefits',
+      'Basic card — no lifestyle perks'
+    ],
+    officialUrl: 'https://www.citibank.ae/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'enbd-lulu-247',
+    bank: 'Emirates NBD',
+    name: 'Lulu 247 Titanium Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #1a2010 0%, #2a3520 100%)',
+    categories: ['cashback', 'free', 'lounge'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: '7% at LuLu, 5% groceries, 1% other',
+    cashbackHighlight: '7% cashback at LuLu',
+    loungeAccess: true,
+    loungeVisits: 'Complimentary',
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.4,
+    bestFor: 'LuLu shoppers, grocery-heavy households',
+    welcomeBonus: 'LuLu vouchers for new applicants',
+    keyBenefits: [
+      '7% cashback as LuLu Points at LuLu Hypermarket',
+      '5% cashback on groceries at other supermarkets',
+      '1% cashback on all other spending',
+      'Complimentary airport lounge access',
+      '0% balance transfer offer available',
+      'AED 5,000 minimum salary only',
+      'Free for life — no hidden annual fees'
+    ],
+    drawbacks: [
+      'Maximum value only for LuLu shoppers',
+      'Points redeemable mainly at LuLu',
+      'Reduced rate on non-grocery spending'
+    ],
+    officialUrl: 'https://www.emiratesnbd.com/en/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'mashreq-noon',
+    bank: 'Mashreq',
+    name: 'noon Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #1f1000 0%, #332000 100%)',
+    categories: ['cashback', 'free', 'shopping'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: '5% noon ecosystem, 1% other',
+    cashbackHighlight: '5% across noon platforms',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.2,
+    bestFor: 'noon.com shoppers, online shoppers',
+    welcomeBonus: 'AED 500 for new customers spending AED 5,000 in first 2 months',
+    keyBenefits: [
+      '5% cashback on noon, NowNow, Sivvi, Namshi',
+      '5% on noon Food and noon Minutes',
+      '1% on other retail spending',
+      'Unlimited free next-day delivery on noon express',
+      'AED 500 welcome bonus',
+      'Free for life'
+    ],
+    drawbacks: [
+      'Only valuable for noon ecosystem users',
+      'Low 1% on non-noon spending',
+      'No travel benefits'
+    ],
+    officialUrl: 'https://www.mashreqbank.com/uae/en/personal/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'hsbc-live-plus',
+    bank: 'HSBC UAE',
+    name: 'Live+ Credit Card',
+    network: 'Visa',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #1a0010 0%, #2d0020 100%)',
+    categories: ['cashback', 'dining', 'lounge'],
+    minSalary: 12500,
+    annualFee: 0,
+    annualFeeNote: 'Free yr 1, AED 314/yr from yr 2',
+    cashback: '6% dining, 5% fuel, 2% groceries/entertainment',
+    cashbackHighlight: '6% dining + Zomato Gold',
+    loungeAccess: true,
+    loungeVisits: 12,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.2,
+    bestFor: 'Dining enthusiasts, lifestyle spenders',
+    welcomeBonus: 'Welcome cashback for new applicants',
+    keyBenefits: [
+      '6% cashback on dining (capped AED 200/month)',
+      '5% on fuel (capped AED 200/month)',
+      '2% on groceries and entertainment',
+      'Complimentary Zomato Gold membership (AED 500+ value)',
+      '12 complimentary lounge visits globally/year',
+      'Supplementary cards also get lounge access',
+      'Free year 1 annual fee'
+    ],
+    drawbacks: [
+      'AED 314 annual fee from year 2',
+      'AED 12,500 minimum salary',
+      'AED 200/month dining cap limits top earners',
+      'No salary transfer required but higher income bar'
+    ],
+    officialUrl: 'https://www.hsbc.ae/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'fab-travel-card',
+    bank: 'FAB',
+    name: 'Travel Credit Card',
+    network: 'Visa',
+    tier: 'Premium',
+    gradient: 'linear-gradient(135deg, #0a1520 0%, #0d2035 100%)',
+    categories: ['travel', 'miles', 'lounge'],
+    minSalary: 10000,
+    annualFee: 500,
+    annualFeeNote: 'AED 500/year',
+    cashback: '12% on portal bookings, 0% FX fees',
+    cashbackHighlight: '12% portal cashback + free flight',
+    loungeAccess: true,
+    loungeVisits: 'Unlimited + 2 guests',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.5,
+    bestFor: 'Frequent travellers not loyal to one airline',
+    welcomeBonus: 'Complimentary return flight to 15+ destinations',
+    keyBenefits: [
+      '12% cashback on flights & hotels via FAB travel portal',
+      'Complimentary annual return flight',
+      'Zero foreign exchange fees from FAB',
+      'Unlimited airport lounge access for cardholder + 2 guests',
+      'FAB Miles transfer to multiple airlines and hotels',
+      'Travel insurance included',
+      'Airport transfer benefits'
+    ],
+    drawbacks: [
+      'AED 500 annual fee',
+      'Best rates apply via FAB portal',
+      'AED 10,000 minimum salary',
+      'Flight benefit subject to terms'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'fab-etihad-infinite',
+    bank: 'FAB',
+    name: 'Etihad Guest Infinite Credit Card',
+    network: 'Visa',
+    tier: 'Premium',
+    gradient: 'linear-gradient(135deg, #0a0a25 0%, #10104a 100%)',
+    categories: ['travel', 'miles', 'lounge'],
+    minSalary: 12000,
+    annualFee: 735,
+    annualFeeNote: 'AED 735/year',
+    cashback: 'Up to 7 Etihad Miles per AED 10 on etihad.com',
+    cashbackHighlight: '7 Etihad Miles per AED 10',
+    loungeAccess: true,
+    loungeVisits: 'Included with Gold tier',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.4,
+    bestFor: 'Etihad frequent flyers, Abu Dhabi travellers',
+    welcomeBonus: '55,000 Etihad Guest Miles + Gold tier fast-track',
+    keyBenefits: [
+      '7 Etihad Miles per AED 10 on etihad.com',
+      '6 miles per AED 10 on international spending',
+      '3.5 miles per AED 10 on UAE spending',
+      '55,000 welcome miles for new applicants',
+      'Etihad Guest Gold tier fast-track',
+      '50% Miles Discount Voucher for award flights',
+      'Airport lounge access with Gold status',
+      'Travel and purchase insurance'
+    ],
+    drawbacks: [
+      'AED 735 annual fee',
+      'Best value for Etihad loyalists',
+      'Miles expire in 3 years without activity'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'hsbc-skywards-signature',
+    bank: 'HSBC UAE',
+    name: 'Emirates Skywards Signature',
+    network: 'Visa',
+    tier: 'Premium',
+    gradient: 'linear-gradient(135deg, #0a0010 0%, #1a0030 100%)',
+    categories: ['travel', 'miles', 'lounge'],
+    minSalary: 12500,
+    annualFee: 1050,
+    annualFeeNote: 'AED 1,050/year',
+    cashback: 'Up to 1.75 Skywards Miles per USD spent',
+    cashbackHighlight: '1.75 Skywards Miles/USD',
+    loungeAccess: true,
+    loungeVisits: 8,
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.1,
+    bestFor: 'Emirates Skywards mid-tier collectors',
+    welcomeBonus: '10,000–15,000 Skywards Miles',
+    keyBenefits: [
+      'Up to 1.75 Emirates Skywards Miles per USD spent',
+      'Emirates Skywards Silver status instantly',
+      '8 complimentary airport lounge visits/year',
+      'Travel insurance coverage',
+      'Airport meet & greet services',
+      'Dining and retail discounts'
+    ],
+    drawbacks: [
+      'AED 1,050 annual fee',
+      'AED 12,500 minimum salary',
+      'Lower earn rate vs Emirates Islamic Skywards Black',
+      '8 lounge visits limited for very frequent flyers'
+    ],
+    officialUrl: 'https://www.hsbc.ae/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'emirates-islamic-skywards-black',
+    bank: 'Emirates Islamic',
+    name: 'Skywards Black Credit Card',
+    network: 'Mastercard',
+    tier: 'Luxury',
+    gradient: 'linear-gradient(135deg, #000000 0%, #1a0a00 100%)',
+    categories: ['travel', 'miles', 'lounge', 'premium'],
+    minSalary: 35000,
+    annualFee: 4200,
+    annualFeeNote: 'AED 4,200/year',
+    cashback: 'Up to 3.5 Skywards Miles per USD on Emirates',
+    cashbackHighlight: '3.5 Skywards Miles/USD on Emirates',
+    loungeAccess: true,
+    loungeVisits: 'Unlimited + 1 guest',
+    travelInsurance: true,
+    islamicCard: true,
+    rating: 4.6,
+    bestFor: 'Emirates loyalists, high-income frequent flyers',
+    welcomeBonus: 'Up to 75,000 Skywards Miles',
+    keyBenefits: [
+      'Up to 3.5 Skywards Miles per USD on Emirates flights',
+      '2 miles per USD international spending',
+      '1.5 miles per USD local AED spending',
+      'Instant Emirates Skywards Silver status',
+      'Fast-track to Gold with USD 5,000 Emirates spend',
+      'Unlimited lounge access (1,200+ lounges) + 1 guest',
+      '4 complimentary airport transfers/year in UAE',
+      '2 Marhaba Meet & Greet services annually',
+      'Unlimited golf at premium UAE courses (with AED 10k/month)',
+      'Metal card — Sharia-compliant (Islamic)',
+      'Up to 75,000 welcome Skywards Miles'
+    ],
+    drawbacks: [
+      'AED 4,200 annual fee — very high',
+      'AED 35,000 minimum salary',
+      'Golf perk requires AED 10,000 monthly spend',
+      'Best value only for Emirates-loyal flyers'
+    ],
+    officialUrl: 'https://www.emiratesislamic.ae/en/personal-banking/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'enbd-skywards-infinite',
+    bank: 'Emirates NBD',
+    name: 'Skywards Infinite Credit Card',
+    network: 'Visa',
+    tier: 'Premium',
+    gradient: 'linear-gradient(135deg, #050510 0%, #101040 100%)',
+    categories: ['travel', 'miles', 'lounge', 'premium'],
+    minSalary: 25000,
+    annualFee: 1500,
+    annualFeeNote: 'AED 1,500/year',
+    cashback: 'Earn Emirates Skywards Miles',
+    cashbackHighlight: 'Instant Skywards Silver status',
+    loungeAccess: true,
+    loungeVisits: 'Unlimited',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.3,
+    bestFor: 'Emirates travelers wanting instant Silver status',
+    welcomeBonus: 'Up to 100,000 Skywards Miles',
+    keyBenefits: [
+      'Earn Emirates Skywards Miles on every spend',
+      'Instant Emirates Skywards Silver status',
+      '3-year Skywards Miles validity',
+      'Unlimited airport lounge access globally',
+      'Emirates lounge access',
+      'Travel and purchase insurance',
+      'Up to 100,000 welcome miles'
+    ],
+    drawbacks: [
+      'AED 1,500 annual fee',
+      'AED 25,000 minimum salary',
+      'Lower earn rate vs Emirates Islamic Skywards Black',
+      'Annual fee higher than some mid-tier alternatives'
+    ],
+    officialUrl: 'https://www.emiratesnbd.com/en/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'rakbank-elevate-world-elite',
+    bank: 'RAKBANK',
+    name: 'Elevate World Elite Credit Card',
+    network: 'Mastercard',
+    tier: 'Premium',
+    gradient: 'linear-gradient(135deg, #0a1520 0%, #102030 100%)',
+    categories: ['premium', 'travel', 'lounge', 'dining'],
+    minSalary: 25000,
+    annualFee: 1500,
+    annualFeeNote: 'AED 1,500/year',
+    cashback: 'AED 200/month streaming cashback + lifestyle',
+    cashbackHighlight: 'Unlimited beach clubs, gyms + concierge',
+    loungeAccess: true,
+    loungeVisits: 'Unlimited',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.5,
+    bestFor: 'Active lifestyle, wellness, experience seekers',
+    welcomeBonus: 'Welcome vouchers and credits',
+    keyBenefits: [
+      'Elevate Premium Pass: unlimited beach clubs, pools, gyms',
+      'Complimentary padel court access',
+      'Up to AED 200/month cashback on streaming services',
+      '50% off VOX Cinema',
+      '2 complimentary chauffeured rides/month',
+      '24/7 luxury concierge service',
+      'Unlimited airport lounge access globally',
+      'Travel and purchase insurance',
+      'Unlimited golf (with AED 10,000/month spend)'
+    ],
+    drawbacks: [
+      'AED 1,500 annual fee',
+      'AED 25,000 minimum salary',
+      'Unlimited golf needs AED 10,000/month',
+      'Best value for active/wellness lifestyle'
+    ],
+    officialUrl: 'https://www.rakbank.ae/en/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'fab-rewards-elite',
+    bank: 'FAB',
+    name: 'Rewards Elite Infinite Credit Card',
+    network: 'Visa',
+    tier: 'Premium',
+    gradient: 'linear-gradient(135deg, #0f1a00 0%, #1a2d00 100%)',
+    categories: ['premium', 'travel', 'lounge', 'miles'],
+    minSalary: 20000,
+    annualFee: 1000,
+    annualFeeNote: 'AED 1,000/year',
+    cashback: '5 FAB Rewards per AED 1 spent',
+    cashbackHighlight: '5 FAB Rewards/AED + unlimited lounge',
+    loungeAccess: true,
+    loungeVisits: 'Unlimited + 1 guest',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.4,
+    bestFor: 'All-round premium without airline loyalty',
+    welcomeBonus: 'Bonus FAB Rewards for new applicants',
+    keyBenefits: [
+      'Up to 5 FAB Rewards per AED 1 spent',
+      'Unlimited airport lounge access (1,000+ lounges) + 1 guest',
+      '8 airport transfers/year within UAE',
+      '4 monthly valet parking services',
+      'Meet & Greet at Dubai International Airport',
+      'FAB Rewards redeemable for cashback, flights, hotels',
+      'Golf course access',
+      'Visa Infinite: Luxury Hotel Collection access',
+      'Extended warranty and purchase protection'
+    ],
+    drawbacks: [
+      'AED 1,000 annual fee',
+      'AED 20,000 minimum salary',
+      'Best value requires diverse spending'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'cbd-super-saver',
+    bank: 'CBD',
+    name: 'Super Saver Credit Card',
+    network: 'Visa',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #001a20 0%, #002535 100%)',
+    categories: ['cashback', 'travel', 'lounge', 'dining'],
+    minSalary: 5000,
+    annualFee: 420,
+    annualFeeNote: 'Free yr 1, AED 420/yr from yr 2',
+    cashback: 'Up to 10% on Bills, Education, Supermarket, Transport',
+    cashbackHighlight: 'Up to 10% on B.E.S.T categories',
+    loungeAccess: true,
+    loungeVisits: 8,
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.3,
+    bestFor: 'Families, school fee payers, utility heavy',
+    welcomeBonus: 'Up to AED 7,200 annual cashback potential',
+    keyBenefits: [
+      'Up to 10% cashback: Bills, Education, Supermarket, Transport',
+      'AED 150/month cap per category (AED 600 total)',
+      'Best card for school fee cashback in UAE',
+      '8 complimentary airport lounge visits globally',
+      'Travel insurance up to USD 500,000',
+      'Purchase protection & extended warranty',
+      '0% instalment plan for big purchases',
+      'Free year 1 annual fee'
+    ],
+    drawbacks: [
+      'AED 420 fee from year 2',
+      'Monthly cap of AED 150/category limits maximum returns',
+      'Must spend across qualifying categories to earn 10%',
+      'Spending thresholds apply for full 10% rate'
+    ],
+    officialUrl: 'https://www.cbd.ae/personal/cards/credit-cards/super-saver',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'emirates-islamic-cashback-plus',
+    bank: 'Emirates Islamic',
+    name: 'CashBack Plus Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #001500 0%, #002500 100%)',
+    categories: ['cashback', 'islamic', 'dining'],
+    minSalary: 5000,
+    annualFee: 200,
+    annualFeeNote: 'Free yr 1, AED 200/yr from yr 2',
+    cashback: 'Up to 10% on groceries, dining, education',
+    cashbackHighlight: 'Up to 10% — Sharia-compliant',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: true,
+    rating: 4.1,
+    bestFor: 'Islamic card seekers, families with education spend',
+    welcomeBonus: 'Welcome cashback for new applicants',
+    keyBenefits: [
+      'Up to 10% cashback on groceries',
+      'Up to 10% cashback on dining',
+      'Up to 10% cashback on education',
+      'Sharia-compliant (Islamic card)',
+      'Free year 1 annual fee',
+      'Tiered cashback based on monthly spend'
+    ],
+    drawbacks: [
+      'AED 200 fee from year 2',
+      'Tiered rates — must meet spend thresholds for 10%',
+      'Monthly caps apply per category',
+      'No lounge access'
+    ],
+    officialUrl: 'https://www.emiratesislamic.ae/en/personal-banking/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'adib-cashback-visa',
+    bank: 'ADIB',
+    name: 'Cashback Visa Covered Card',
+    network: 'Visa',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #101500 0%, #1a2500 100%)',
+    categories: ['cashback', 'islamic', 'fuel', 'dining'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: '4% groceries, fuel, dining, education, utilities, automobile',
+    cashbackHighlight: '4% across 6 categories — Sharia-compliant',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: true,
+    rating: 4.2,
+    bestFor: 'Islamic card seekers wanting broad cashback',
+    welcomeBonus: 'Available for new applicants',
+    keyBenefits: [
+      '4% cashback on: groceries, fuel, dining, education, utilities, automobile',
+      'No minimum salary requirement specified',
+      'Sharia-compliant (covered card)',
+      'Free for life — no annual fee',
+      'Broad 6-category cashback coverage'
+    ],
+    drawbacks: [
+      '4% lower than category leaders (6%)',
+      'No travel or lounge benefits',
+      'Monthly cashback caps apply'
+    ],
+    officialUrl: 'https://www.adib.ae/en/personal/cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'fab-gems-titanium',
+    bank: 'FAB',
+    name: 'GEMS Titanium Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #100a1a 0%, #1c1230 100%)',
+    categories: ['cashback', 'free', 'shopping'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: '4.25% off GEMS fees + 10% school cashback',
+    cashbackHighlight: '4.25% direct discount on GEMS school fees',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.3,
+    bestFor: 'GEMS Education school parents',
+    welcomeBonus: 'Fee savings from first payment',
+    keyBenefits: [
+      '4.25% direct discount on advance GEMS school fees',
+      '10% cashback on school-related spending',
+      'Free for life — no annual fee',
+      'Cashback on general spending',
+      'For all 60+ GEMS schools in UAE',
+      'Lifestyle discounts and offers'
+    ],
+    drawbacks: [
+      'Primary benefit only for GEMS school parents',
+      'Non-GEMS parents should use CBD Super Saver instead',
+      'School discount requires advance fee payment'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'mashreq-vantage',
+    bank: 'Mashreq',
+    name: 'Vantage Credit Card',
+    network: 'Visa',
+    tier: 'Premium',
+    gradient: 'linear-gradient(135deg, #0a1520 0%, #151f30 100%)',
+    categories: ['premium', 'lounge', 'travel', 'dining'],
+    minSalary: 25000,
+    annualFee: 1575,
+    annualFeeNote: 'AED 1,575/year',
+    cashback: 'Points on spending + lifestyle benefits',
+    cashbackHighlight: 'Fitness First + valet + cinema + lounge',
+    loungeAccess: true,
+    loungeVisits: 'Unlimited',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.2,
+    bestFor: 'Premium lifestyle, fitness enthusiasts',
+    welcomeBonus: 'Vouchers and bonus points',
+    keyBenefits: [
+      'Fitness First membership (valued at AED 3,000+)',
+      'Unlimited airport lounge access globally',
+      'Valet parking service in UAE',
+      '50% off cinema tickets',
+      'Complimentary airport transfers',
+      'Premium dining discounts',
+      'Travel and medical insurance',
+      'Concierge service'
+    ],
+    drawbacks: [
+      'AED 1,575 annual fee',
+      'AED 25,000 minimum salary',
+      'Fitness First value depends on gym usage'
+    ],
+    officialUrl: 'https://www.mashreqbank.com/uae/en/personal/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'dib-prime-gold',
+    bank: 'DIB',
+    name: 'Prime Gold Covered Card',
+    network: 'Visa',
+    tier: 'Entry',
+    gradient: 'linear-gradient(135deg, #151000 0%, #252000 100%)',
+    categories: ['cashback', 'islamic', 'free'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: '5% select categories',
+    cashbackHighlight: '5% cashback — lowest salary in market',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: true,
+    rating: 4.0,
+    bestFor: 'Entry-level Islamic card, AED 5,000 salary',
+    welcomeBonus: 'Available for new applicants',
+    keyBenefits: [
+      '5% cashback on select categories',
+      'Sharia-compliant (covered card)',
+      'Free for life — no annual fee',
+      'One of the lowest salary requirements in UAE (AED 5,000)',
+      'DIB bank backing and branch network'
+    ],
+    drawbacks: [
+      'Select categories only for 5% rate',
+      'No lounge access or travel benefits',
+      'Reduced rates on non-qualifying spend'
+    ],
+    officialUrl: 'https://www.dib.ae/personal/cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'adib-etihad-infinite',
+    bank: 'ADIB',
+    name: 'Etihad Guest Visa Infinite Covered Card',
+    network: 'Visa',
+    tier: 'Premium',
+    gradient: 'linear-gradient(135deg, #050530 0%, #0a0a50 100%)',
+    categories: ['travel', 'miles', 'lounge', 'islamic'],
+    minSalary: 25000,
+    annualFee: 1200,
+    annualFeeNote: 'AED 1,200/year',
+    cashback: 'Etihad Guest Miles on every spend',
+    cashbackHighlight: 'Etihad Miles + Sharia-compliant',
+    loungeAccess: true,
+    loungeVisits: 'Included with Etihad status',
+    travelInsurance: true,
+    islamicCard: true,
+    rating: 4.1,
+    bestFor: 'Islamic card seekers who fly Etihad',
+    welcomeBonus: 'Etihad Guest Miles welcome bonus',
+    keyBenefits: [
+      'Earn Etihad Guest Miles on all spending',
+      'Sharia-compliant (covered card)',
+      'Airport lounge access via Etihad status',
+      'Travel and purchase insurance',
+      'Visa Infinite benefits globally'
+    ],
+    drawbacks: [
+      'AED 1,200 annual fee',
+      'AED 25,000 minimum salary',
+      'Miles best value for Etihad flyers',
+      'Lounge access tied to Etihad tier status'
+    ],
+    officialUrl: 'https://www.adib.ae/en/personal/cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'hsbc-cash-plus',
+    bank: 'HSBC UAE',
+    name: 'Cash+ Credit Card',
+    network: 'Visa',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #200010 0%, #350020 100%)',
+    categories: ['cashback', 'lounge'],
+    minSalary: 12500,
+    annualFee: 0,
+    annualFeeNote: 'Free yr 1 then AED 500/yr (waivable)',
+    cashback: 'Cashback on all spending',
+    cashbackHighlight: 'Simple cashback structure',
+    loungeAccess: true,
+    loungeVisits: 4,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.9,
+    bestFor: 'HSBC customers wanting simple cashback',
+    welcomeBonus: 'Cashback offer for new customers',
+    keyBenefits: [
+      'Cashback on all purchases',
+      '4 airport lounge visits/year',
+      'Simple earning structure',
+      'HSBC global banking network',
+      'Apple Pay and contactless payments'
+    ],
+    drawbacks: [
+      'AED 12,500 minimum salary',
+      'Annual fee from year 2',
+      'Fewer lounge visits than Live+',
+      'No dining or fuel bonus categories'
+    ],
+    officialUrl: 'https://www.hsbc.ae/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'enbd-noon-one',
+    bank: 'Emirates NBD',
+    name: 'noon One Visa Credit Card',
+    network: 'Visa',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #1a0f00 0%, #2d1e00 100%)',
+    categories: ['cashback', 'free', 'shopping', 'dining'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: '20% on noon Food, 10% on NowNow, 5% noon.com',
+    cashbackHighlight: '20% on noon Food delivery',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.1,
+    bestFor: 'noon Food addicts, delivery-heavy users',
+    welcomeBonus: 'noon credits for new applicants',
+    keyBenefits: [
+      '20% cashback on noon Food orders',
+      '10% cashback on NowNow (q-commerce)',
+      '5% cashback on noon.com shopping',
+      '1% on all other spending',
+      'Free for life',
+      'noon vouchers and offers'
+    ],
+    drawbacks: [
+      'Only valuable for noon ecosystem users',
+      'Low rate (1%) on non-noon spending',
+      'No travel or lounge benefits'
+    ],
+    officialUrl: 'https://www.emiratesnbd.com/en/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'adcb-talabat',
+    bank: 'ADCB',
+    name: 'Talabat ADCB Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #1a0000 0%, #2d0a00 100%)',
+    categories: ['cashback', 'free', 'dining'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: 'Talabat Tala credits on Talabat orders',
+    cashbackHighlight: 'Best card for Talabat users',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.9,
+    bestFor: 'Talabat app heavy users',
+    welcomeBonus: 'Talabat credits for new customers',
+    keyBenefits: [
+      'Earn Tala credits on all Talabat orders',
+      'Bonus Tala on Talabat grocery orders',
+      'Free for life',
+      'Talabat vouchers and exclusive deals',
+      'Digital card for instant use'
+    ],
+    drawbacks: [
+      'Value limited to Talabat users',
+      'Low return on non-Talabat spending',
+      'Tala credits only redeemable on Talabat'
+    ],
+    officialUrl: 'https://www.adcb.com/en/personal/cards/credit-cards/',
+    lastVerified: 'Aug 2026',
+    isNew: false
+  },
+  {
+    id: 'enbd-voyager-world',
+    bank: 'Emirates NBD',
+    name: 'Voyager World Credit Card',
+    network: 'Mastercard',
+    tier: 'World',
+    gradient: 'linear-gradient(135deg, #0a1a3d 0%, #14295c 100%)',
+    categories: ['travel', 'free', 'lounge'],
+    minSalary: 12000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: 'No cashback — earns Voyager Miles instead',
+    cashbackHighlight: '6 Voyager Miles/AED on travel bookings',
+    loungeAccess: true,
+    loungeVisits: 'Complimentary via LoungeKey',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.3,
+    bestFor: 'Free-for-life travel rewards, occasional flyers',
+    welcomeBonus: 'Up to 75,000 Voyager Miles on spending AED 35,000 in first 90 days',
+    keyBenefits: [
+      '6 Voyager Miles per AED 1 on the Voyager Travel Portal',
+      '0.5 Voyager Miles per AED 1 on other travel bookings',
+      '0.1 Voyager Miles per AED 1 on general retail spending',
+      'Complimentary airport lounge access',
+      'Free for life — no joining or annual fee',
+      'Complimentary Visa appointment and processing via OneVasco'
+    ],
+    drawbacks: [
+      'Low earn rate outside travel spending',
+      '~3.14% foreign exchange markup on international transactions',
+      'Best value only for travel-heavy spenders'
+    ],
+    officialUrl: 'https://www.emiratesnbd.com/en/cards/credit-cards/voyager-world-credit-card',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'enbd-voyager-world-elite',
+    bank: 'Emirates NBD',
+    name: 'Voyager World Elite Credit Card',
+    network: 'Mastercard',
+    tier: 'World Elite',
+    gradient: 'linear-gradient(135deg, #1a1030 0%, #2c1a50 100%)',
+    categories: ['travel', 'lounge', 'premium'],
+    minSalary: 25000,
+    annualFee: 1575,
+    annualFeeNote: 'Free first year, AED 1,575 from year two',
+    cashback: 'No cashback — earns Voyager Miles instead',
+    cashbackHighlight: '12 Voyager Miles/AED on travel bookings',
+    loungeAccess: true,
+    loungeVisits: 'Unlimited via LoungeKey',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.5,
+    bestFor: 'Frequent travelers wanting premium miles and lounge access',
+    welcomeBonus: 'Up to 150,000 Voyager Miles on spending AED 70,000 in first 90 days',
+    keyBenefits: [
+      '12 Voyager Miles per AED 1 on the Voyager Travel Portal',
+      '1 Voyager Mile per AED 1 on all other spending',
+      'Unlimited complimentary airport lounge access',
+      'Airport fast-track and meet & greet services',
+      'Complimentary golf and valet parking privileges',
+      'No annual fee in the first year'
+    ],
+    drawbacks: [
+      'High AED 25,000 minimum salary requirement',
+      'AED 1,575 annual fee from year two, non-waivable',
+      'Best value concentrated on travel-portal bookings'
+    ],
+    officialUrl: 'https://www.emiratesnbd.com/en/cards/credit-cards/voyager-world-elite-credit-card',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-elite',
+    bank: 'FAB',
+    name: 'FAB Elite Credit Card',
+    network: 'Visa',
+    tier: 'Infinite',
+    gradient: 'linear-gradient(135deg, #1a1608 0%, #2e2610 100%)',
+    categories: ['premium', 'lounge', 'travel'],
+    minSalary: 40000,
+    annualFee: 1260,
+    annualFeeNote: 'AED 1,260/year (supplementary free), per FAB official fee schedule',
+    cashback: 'FAB Rewards points on all spending',
+    cashbackHighlight: 'Premium rewards + concierge tier',
+    loungeAccess: true,
+    loungeVisits: 'Unlimited',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.3,
+    bestFor: 'High-income professionals wanting FAB\'s top consumer rewards tier',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'Unlimited complimentary airport lounge access',
+      'FAB Rewards points redeemable for cashback, vouchers or miles',
+      'Concierge and travel assistance services',
+      'Premium travel insurance coverage'
+    ],
+    drawbacks: [
+      'High AED 40,000 minimum salary requirement',
+      'Detailed reward earn rates not fully published online',
+      'AED 1,260 annual fee'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-etihad-signature',
+    bank: 'FAB',
+    name: 'Etihad Guest Signature Credit Card',
+    network: 'Visa',
+    tier: 'Signature',
+    gradient: 'linear-gradient(135deg, #0a1a1a 0%, #123030 100%)',
+    categories: ['travel', 'lounge'],
+    minSalary: 15000,
+    annualFee: 1575,
+    annualFeeNote: 'AED 1,575/year, per FAB official fee schedule',
+    cashback: 'No cashback — earns Etihad Guest Miles',
+    cashbackHighlight: 'Up to 7.5 Etihad Guest Miles per AED 10',
+    loungeAccess: true,
+    loungeVisits: 'Complimentary',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.2,
+    bestFor: 'Etihad Guest members below the Infinite salary threshold',
+    welcomeBonus: 'Etihad Guest Miles welcome bonus (spend-based)',
+    keyBenefits: [
+      'Earns Etihad Guest Miles on every spend',
+      'Fast-track toward Etihad Guest Gold membership',
+      'Two discounted airport transfers per year',
+      'Complimentary airport lounge access',
+      'Spend AED 150,000/year for a 50% miles discount voucher'
+    ],
+    drawbacks: [
+      'Lower earn rate and fewer transfers than the Infinite tier',
+      'AED 1,575 annual fee',
+      'Best suited to travelers who already collect Etihad Guest miles'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards/etihad-guest-signature',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-etihad-platinum',
+    bank: 'FAB',
+    name: 'Etihad Guest Platinum Credit Card',
+    network: 'Visa',
+    tier: 'Platinum',
+    gradient: 'linear-gradient(135deg, #101820 0%, #1c2c38 100%)',
+    categories: ['travel', 'free'],
+    minSalary: 8000,
+    annualFee: 525,
+    annualFeeNote: 'AED 525/year, per FAB official fee schedule',
+    cashback: 'No cashback — earns Etihad Guest Miles',
+    cashbackHighlight: 'Entry-level Etihad Guest earning',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.9,
+    bestFor: 'Entry-level Etihad Guest miles collectors',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'Earns Etihad Guest Miles on everyday spending',
+      'Spend AED 100,000/year for a 25% miles discount voucher',
+      'Accessible AED 8,000 salary requirement',
+      'Wi-Fi vouchers on eligible Etihad flights'
+    ],
+    drawbacks: [
+      'No airport lounge access at this tier',
+      'Lower mile-earning rate than Signature/Infinite',
+      'AED 525 annual fee'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-gems-world',
+    bank: 'FAB',
+    name: 'FAB GEMS World Credit Card',
+    network: 'Mastercard',
+    tier: 'World',
+    gradient: 'linear-gradient(135deg, #1a0a20 0%, #2c1436 100%)',
+    categories: ['lifestyle', 'shopping'],
+    minSalary: 8000,
+    annualFee: 419,
+    annualFeeNote: 'AED 418.95/year, per FAB official fee schedule',
+    cashback: 'FAB Rewards points on GEMS school fee and general spending',
+    cashbackHighlight: 'Rewards on school fee payments',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.8,
+    bestFor: 'Parents paying GEMS school fees who want a mid-tier lifestyle card',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'FAB Rewards points on GEMS Education fee payments',
+      'FAB Rewards points on everyday retail spending',
+      'Instalment plan options for school fee payments'
+    ],
+    drawbacks: [
+      'Narrow value proposition outside GEMS fee payments',
+      'No lounge access at this tier',
+      'AED 418.95 annual fee'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-adnoc-rewards',
+    bank: 'FAB',
+    name: 'FAB ADNOC Rewards Credit Card',
+    network: 'World Mastercard',
+    tier: 'World',
+    gradient: 'linear-gradient(135deg, #0a1810 0%, #123020 100%)',
+    categories: ['fuel', 'salik', 'rewards'],
+    minSalary: 5000,
+    annualFee: 315,
+    annualFeeNote: 'AED 315/year, per FAB official fee schedule',
+    cashback: '15% back at ADNOC fuel stations (min AED 3,000/month spend)',
+    cashbackHighlight: '15% back on ADNOC fuel',
+    loungeAccess: true,
+    loungeVisits: 'Access to 1,300+ lounges when spending USD 1 on the card',
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.1,
+    bestFor: 'Drivers who fuel regularly at ADNOC and use Salik/DARB',
+    welcomeBonus: '300,000 ADNOC Rewards points (worth AED 300) on signup',
+    keyBenefits: [
+      '15% back at ADNOC service stations (up to AED 150/month)',
+      '30 ADNOC Rewards points per AED 1 on SALIK, DARB and Mawaqif',
+      'Fast-track to ADNOC Rewards Gold Membership',
+      'Airport lounge access with minimal spend condition',
+      'Two discounted cinema tickets per month'
+    ],
+    drawbacks: [
+      'Fuel cashback capped and requires AED 3,000 monthly spend to unlock',
+      'Rewards value concentrated on ADNOC-branded spending',
+      'AED 315 annual fee'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards/fab-adnoc-rewards-credit-card',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-share-infinite',
+    bank: 'FAB',
+    name: 'FAB SHARE Infinite Credit Card',
+    network: 'Visa',
+    tier: 'Infinite',
+    gradient: 'linear-gradient(135deg, #1a1400 0%, #2e2400 100%)',
+    categories: ['shopping', 'lounge', 'premium'],
+    minSalary: 20000,
+    annualFee: 1050,
+    annualFeeNote: 'AED 1,050/year, per FAB official fee schedule',
+    cashback: 'SHARE points at Al Futtaim & Majid Al Futtaim retail brands',
+    cashbackHighlight: 'Elevated SHARE points at partner malls/retail',
+    loungeAccess: true,
+    loungeVisits: 'Complimentary',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.0,
+    bestFor: 'Frequent shoppers at Al Futtaim/Majid Al Futtaim malls and brands',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'Elevated SHARE points at Al Futtaim and Majid Al Futtaim outlets',
+      'Complimentary airport lounge access',
+      'Premium travel insurance',
+      'Cinema and dining privileges at partner malls'
+    ],
+    drawbacks: [
+      'Best value concentrated on Al Futtaim ecosystem spending',
+      'High AED 20,000 salary requirement',
+      'AED 1,050 annual fee'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-share-signature',
+    bank: 'FAB',
+    name: 'FAB SHARE Signature Credit Card',
+    network: 'Visa',
+    tier: 'Signature',
+    gradient: 'linear-gradient(135deg, #14100a 0%, #241c12 100%)',
+    categories: ['shopping', 'free'],
+    minSalary: 10000,
+    annualFee: 525,
+    annualFeeNote: 'AED 525/year, per FAB official fee schedule',
+    cashback: 'SHARE points at Al Futtaim & Majid Al Futtaim retail brands',
+    cashbackHighlight: 'Mid-tier SHARE points at partner malls',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.8,
+    bestFor: 'Regular Al Futtaim mall/brand shoppers on a mid income',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'SHARE points at Al Futtaim and Majid Al Futtaim outlets',
+      'Cinema and dining discounts at partner malls',
+      'Accessible AED 10,000 salary requirement'
+    ],
+    drawbacks: [
+      'No airport lounge access at this tier',
+      'Narrow value outside the Al Futtaim ecosystem',
+      'AED 525 annual fee'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-share-platinum',
+    bank: 'FAB',
+    name: 'FAB SHARE Platinum Credit Card',
+    network: 'Visa',
+    tier: 'Platinum',
+    gradient: 'linear-gradient(135deg, #101010 0%, #1e1e1e 100%)',
+    categories: ['shopping', 'free'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: 'SHARE points at Al Futtaim & Majid Al Futtaim retail brands',
+    cashbackHighlight: 'Entry-level SHARE points, free for life',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.9,
+    bestFor: 'Entry-level Al Futtaim mall shoppers wanting a free card',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'SHARE points at Al Futtaim and Majid Al Futtaim outlets',
+      'Free for life — no annual fee',
+      'AED 5,000 minimum salary requirement'
+    ],
+    drawbacks: [
+      'No lounge access or travel perks',
+      'Lower earn rate than Signature/Infinite SHARE tiers',
+      'Value limited outside Al Futtaim ecosystem'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-blue-infinite',
+    bank: 'FAB',
+    name: 'BLUE by FAB Infinite Credit Card',
+    network: 'Mastercard',
+    tier: 'Infinite',
+    gradient: 'linear-gradient(135deg, #051428 0%, #0a2850 100%)',
+    categories: ['shopping', 'lounge', 'free'],
+    minSalary: 15000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: 'BLUE rewards on Al-Futtaim retail brands',
+    cashbackHighlight: 'Free-for-life premium Al-Futtaim card',
+    loungeAccess: true,
+    loungeVisits: 'Complimentary',
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 4.1,
+    bestFor: 'Al-Futtaim BLUE loyalty members wanting a free premium card',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'BLUE Rewards on Al-Futtaim brand spending',
+      'Complimentary airport lounge access',
+      'Free for life at the Infinite tier — no annual fee'
+    ],
+    drawbacks: [
+      'Best value tied to Al-Futtaim brand spending',
+      'AED 15,000 minimum salary requirement',
+      'Limited public detail on full benefit schedule'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'fab-rewards-active',
+    bank: 'FAB',
+    name: 'FAB Rewards Active Credit Card',
+    network: 'Visa',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #0a1a10 0%, #123420 100%)',
+    categories: ['lifestyle', 'free'],
+    minSalary: 5000,
+    annualFee: 315,
+    annualFeeNote: 'No fee in year one; AED 315/year from year two, per FAB official fee schedule',
+    cashback: 'FAB Rewards points, fitness-linked bonus points',
+    cashbackHighlight: '25 FAB Rewards per 1,000 daily steps via STEPPI',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.9,
+    bestFor: 'Fitness-focused applicants wanting gym access and step-based rewards',
+    welcomeBonus: 'Free fitness and payment ring plus 25+ gym access in year one',
+    keyBenefits: [
+      'Free access to 25+ gyms and fitness classes across the UAE',
+      'Earn 25 FAB Rewards per 1,000 daily steps via the STEPPI app',
+      'Up to 20% off top sports brands online with Sun & Sand Sports',
+      'No annual fee in the first year'
+    ],
+    drawbacks: [
+      'AED 315 annual fee from year two',
+      'Rewards value concentrated on fitness-linked spending',
+      'Accessible AED 5,000 salary requirement'
+    ],
+    officialUrl: 'https://www.bankfab.com/en-ae/personal/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'mashreq-platinum-plus',
+    bank: 'Mashreq',
+    name: 'Platinum Plus Credit Card',
+    network: 'Visa',
+    tier: 'Platinum',
+    gradient: 'linear-gradient(135deg, #101c2e 0%, #1c3450 100%)',
+    categories: ['cashback', 'dining', 'lounge'],
+    minSalary: 8000,
+    annualFee: 314,
+    annualFeeNote: 'AED 299 + 5% VAT (AED ~314); supplementary card free for life',
+    cashback: '5% dining, 1% international, up to 1% other local spend',
+    cashbackHighlight: '5% cashback on dining',
+    loungeAccess: true,
+    loungeVisits: '4 complimentary visits/year (min AED 7,000 spend previous month)',
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.9,
+    bestFor: 'Mid-income diners wanting lounge access with a modest fee',
+    welcomeBonus: 'MakeMyTrip discount and reward-wallet credit on booking',
+    keyBenefits: [
+      '5% cashback on dining spends',
+      'Mashreq Vantage reward points on all spending',
+      '4 movie tickets per month at 50% off (VOX, Reel, Novo)',
+      'Complimentary airport lounge access (spend-conditional)'
+    ],
+    drawbacks: [
+      'Lounge access requires AED 7,000 minimum prior-month spend',
+      'Cashback capped and dining-focused',
+      'AED ~314 annual fee'
+    ],
+    officialUrl: 'https://www.mashreq.com/en/uae/neo/cards/credit-cards/platinum-plus-credit-card/',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'mashreq-solitaire',
+    bank: 'Mashreq',
+    name: 'Solitaire Credit Card',
+    network: 'Mastercard',
+    tier: 'World Elite',
+    gradient: 'linear-gradient(135deg, #1c1608 0%, #302810 100%)',
+    categories: ['cashback', 'lounge', 'premium'],
+    minSalary: 25000,
+    annualFee: 2500,
+    annualFeeNote: 'AED 2,500/year (waived for qualifying Mashreq Gold customers)',
+    cashback: 'Unlimited cashback on all spending',
+    cashbackHighlight: 'Unlimited flat-rate cashback, premium tier',
+    loungeAccess: true,
+    loungeVisits: 'Complimentary at 1,000+ lounges',
+    travelInsurance: true,
+    islamicCard: false,
+    rating: 4.2,
+    bestFor: 'High earners wanting flat-rate cashback plus premium travel perks',
+    welcomeBonus: 'AED 2,500 welcome bonus for qualifying new customers',
+    keyBenefits: [
+      'Unlimited cashback on all spending categories',
+      'Complimentary access to 1,000+ airport lounges worldwide',
+      '50% discount on movie tickets',
+      'Concierge and premium travel insurance'
+    ],
+    drawbacks: [
+      'High AED 25,000 minimum salary requirement',
+      'AED 2,500 annual fee unless waived via Mashreq Gold',
+      'Cashback rate not published as a specific percentage'
+    ],
+    officialUrl: 'https://www.mashreq.com/en/uae/personal-banking/cards/credit-cards/',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'rakbank-red',
+    bank: 'RAKBANK',
+    name: 'RED Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #2a0808 0%, #4a1010 100%)',
+    categories: ['cashback', 'free'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life',
+    cashback: 'Up to 1.5% on retail spend, 0.25% on government/utilities',
+    cashbackHighlight: 'Simple flat cashback, free for life',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.9,
+    bestFor: 'First-time or lower-income UAE cardholders wanting simple cashback',
+    welcomeBonus: 'AED 300–500 welcome cashback on spend within 60 days (promo, check current terms)',
+    keyBenefits: [
+      '1.5% cashback on retail spend AED 3,000+/month (1% below that)',
+      '0.25% cashback on government services and utilities',
+      'Free for life — no annual fee',
+      'Accessible AED 5,000 minimum salary',
+      'Free remittances'
+    ],
+    drawbacks: [
+      'No airport lounge access or travel perks',
+      'Cashback rate modest versus dedicated cashback cards',
+      'Best suited to simple, low-maintenance spending'
+    ],
+    officialUrl: 'https://www.rakbank.ae/en/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'cbi-first',
+    bank: 'CBI',
+    name: 'CBI First Credit Card',
+    network: 'Mastercard',
+    tier: 'Standard',
+    gradient: 'linear-gradient(135deg, #0a1428 0%, #142850 100%)',
+    categories: ['free', 'dining'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life (per CBI official Key Facts Statement)',
+    cashback: 'CBI Rewards points on spending',
+    cashbackHighlight: 'Entry-level, free-for-life CBI card',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.7,
+    bestFor: 'Entry-level applicants wanting a free CBI card',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'Free movie offers',
+      '0% Easy Payment Plan (EPP) at selected retailers',
+      'CBI Rewards loyalty points',
+      'Free for life — no annual fee'
+    ],
+    drawbacks: [
+      'No lounge access or travel benefits',
+      'Limited publicly detailed reward rates',
+      'Entry-level benefit set'
+    ],
+    officialUrl: 'https://www.cbiuae.com/en/personal/products-and-services/cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'cbi-rewards-world',
+    bank: 'CBI',
+    name: 'Rewards World Credit Card',
+    network: 'World Mastercard',
+    tier: 'World',
+    gradient: 'linear-gradient(135deg, #141010 0%, #241c1c 100%)',
+    categories: ['rewards', 'dining'],
+    minSalary: 10000,
+    annualFee: 840,
+    annualFeeNote: 'AED 840/year (per CBI official Key Facts Statement)',
+    cashback: 'CBI Rewards points on spending',
+    cashbackHighlight: 'Mid-premium CBI rewards tier',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.7,
+    bestFor: 'CBI customers wanting a mid-tier rewards card',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'CBI Rewards loyalty points on spending',
+      'Free movie offers',
+      '0% Easy Payment Plan (EPP) at selected retailers'
+    ],
+    drawbacks: [
+      'AED 840 annual fee — the highest among CBI\'s consumer cards',
+      'No lounge access',
+      'Limited publicly detailed reward rates'
+    ],
+    officialUrl: 'https://www.cbiuae.com/en/personal/products-and-services/cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'cbi-rewards-platinum',
+    bank: 'CBI',
+    name: 'Rewards Platinum Credit Card',
+    network: 'Mastercard',
+    tier: 'Platinum',
+    gradient: 'linear-gradient(135deg, #101018 0%, #1e1e30 100%)',
+    categories: ['rewards', 'free'],
+    minSalary: 8000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life (per CBI official Key Facts Statement)',
+    cashback: 'CBI Rewards points on spending',
+    cashbackHighlight: 'Free-for-life Platinum rewards card',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.8,
+    bestFor: 'Mid-income applicants wanting a free Platinum-tier card',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'CBI Rewards loyalty points on spending',
+      'Free movie offers and dining discounts',
+      'Free for life — no annual fee'
+    ],
+    drawbacks: [
+      'No lounge access or travel perks',
+      'Limited publicly detailed reward rates'
+    ],
+    officialUrl: 'https://www.cbiuae.com/en/personal/products-and-services/cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'cbi-mastercard-titanium',
+    bank: 'CBI',
+    name: 'Mastercard Titanium Credit Card',
+    network: 'Mastercard',
+    tier: 'Titanium',
+    gradient: 'linear-gradient(135deg, #181818 0%, #2c2c2c 100%)',
+    categories: ['free'],
+    minSalary: 5000,
+    annualFee: 0,
+    annualFeeNote: 'Free for life (per CBI official Key Facts Statement)',
+    cashback: 'CBI Rewards points on spending',
+    cashbackHighlight: 'Entry-level Titanium tier',
+    loungeAccess: false,
+    travelInsurance: false,
+    islamicCard: false,
+    rating: 3.6,
+    bestFor: 'Applicants wanting a basic, no-fee starter card',
+    welcomeBonus: 'Not specified by issuer',
+    keyBenefits: [
+      'CBI Rewards loyalty points',
+      'Free movie offers',
+      'Free for life — no annual fee'
+    ],
+    drawbacks: [
+      'Basic benefit set with no lounge or travel perks',
+      'Limited publicly detailed reward rates'
+    ],
+    officialUrl: 'https://www.cbiuae.com/en/personal/products-and-services/cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  },
+  {
+    id: 'alhilal-etihad-infinite',
+    bank: 'Al Hilal Bank',
+    name: 'Etihad Guest Infinite Credit Card',
+    network: 'Visa',
+    tier: 'Infinite',
+    gradient: 'linear-gradient(135deg, #0a2010 0%, #123c20 100%)',
+    categories: ['travel', 'lounge', 'islamic'],
+    minSalary: 30000,
+    annualFee: 2500,
+    annualFeeNote: 'Premium tier fee — confirm exact figure with issuer',
+    cashback: 'No cashback — earns Etihad Guest Miles',
+    cashbackHighlight: 'Sharia-compliant Etihad Guest earning',
+    loungeAccess: true,
+    loungeVisits: 'Complimentary',
+    travelInsurance: true,
+    islamicCard: true,
+    rating: 4.0,
+    bestFor: 'Etihad Guest members wanting a Sharia-compliant premium travel card',
+    welcomeBonus: 'Etihad Guest Miles welcome bonus (spend-based)',
+    keyBenefits: [
+      'Earns Etihad Guest Miles on every spend',
+      'Sharia-compliant covered card structure',
+      'Complimentary airport lounge access',
+      'Fast-track toward Etihad Guest Gold tier'
+    ],
+    drawbacks: [
+      'High AED 30,000 minimum salary requirement',
+      'Detailed fee schedule not fully published online — confirm with issuer',
+      'Fewer public reviews than larger-bank equivalents'
+    ],
+    officialUrl: 'https://www.alhilalbank.ae/en/personal/cards/credit-cards',
+    lastVerified: 'Aug 2026',
+    isNew: true
+  }
+];
+
+// ── CATEGORIES ──
+const CATEGORIES = [
+  { key: 'cashback', label: 'Cashback', icon: '💰', count: 14 },
+  { key: 'travel', label: 'Travel', icon: '✈️', count: 8 },
+  { key: 'miles', label: 'Airline Miles', icon: '🛫', count: 6 },
+  { key: 'dining', label: 'Dining', icon: '🍽️', count: 9 },
+  { key: 'lounge', label: 'Airport Lounge', icon: '🛋️', count: 10 },
+  { key: 'free', label: 'No Annual Fee', icon: '⭐', count: 12 },
+  { key: 'islamic', label: 'Islamic / Halal', icon: '☪️', count: 7 },
+  { key: 'premium', label: 'Premium', icon: '💎', count: 6 },
+  { key: 'fuel', label: 'Fuel / Salik', icon: '⛽', count: 5 },
+  { key: 'shopping', label: 'Online Shopping', icon: '🛍️', count: 5 },
+];
+
+// ── BANKS ──
+// BANKS is derived live from UAE_CARDS — never hand-maintained — so the bank
+// directory and card counts can never drift out of sync with the real database.
+const BANK_COLORS = {
+  'Emirates NBD': '#1a3d5c', 'FAB': '#1a4a1a', 'ADCB': '#4a1a1a', 'Mashreq': '#1a1a4a',
+  'HSBC UAE': '#6a0a0a', 'Emirates Islamic': '#004a20', 'DIB': '#2a1a00', 'ADIB': '#001a4a',
+  'RAKBANK': '#1a0a2a', 'Citi UAE': '#001a2a', 'Liv': '#2d1a5c', 'Wio': '#0a3a3a',
+  'CBD': '#3a2a0a', 'CBI': '#0a1428', 'Al Hilal Bank': '#123c20', 'SIB': '#0a2a2a',
+  'Ajman Bank': '#2a1a0a', 'NBF': '#1a2a3a', 'UAB': '#3a1a2a'
+};
+function shortBankName(name) {
+  const overrides = { 'Emirates NBD': 'ENBD', 'Emirates Islamic': 'EI', 'HSBC UAE': 'HSBC', 'Citi UAE': 'Citi', 'Al Hilal Bank': 'AHB' };
+  if (overrides[name]) return overrides[name];
+  const words = name.split(' ');
+  return words.length > 1 ? words.map(w => w[0]).join('').toUpperCase().slice(0, 4) : name.slice(0, 4).toUpperCase();
+}
+function computeBanks() {
+  const counts = {};
+  UAE_CARDS.forEach(c => { counts[c.bank] = (counts[c.bank] || 0) + 1; });
+  return Object.keys(counts)
+    .map(name => ({ name, short: shortBankName(name), cards: counts[name], color: BANK_COLORS[name] || '#2a2a3a' }))
+    .sort((a, b) => b.cards - a.cards);
+}
+const BANKS = computeBanks();
+
+// ── QUIZ STEPS ──
+const QUIZ_STEPS = [
+  {
+    q: 'What matters most to you?',
+    sub: 'Select all that apply',
+    multi: true,
+    options: [
+      { icon: '💰', label: 'Maximum cashback', value: 'cashback' },
+      { icon: '✈️', label: 'Travel perks', value: 'travel' },
+      { icon: '🛫', label: 'Airline miles', value: 'miles' },
+      { icon: '🍽️', label: 'Dining rewards', value: 'dining' },
+      { icon: '🛋️', label: 'Airport lounge access', value: 'lounge' },
+      { icon: '⭐', label: 'No annual fee', value: 'free' },
+      { icon: '⛽', label: 'Fuel / Salik savings', value: 'fuel' },
+      { icon: '💎', label: 'Premium lifestyle', value: 'premium' },
+    ],
+    key: 'priorities'
+  },
+  {
+    q: 'Where do you spend the most?',
+    sub: 'Choose your top spending categories',
+    multi: true,
+    options: [
+      { icon: '🛒', label: 'Groceries & supermarkets', value: 'groceries' },
+      { icon: '🍴', label: 'Restaurants & cafes', value: 'restaurants' },
+      { icon: '🛍️', label: 'Online shopping', value: 'online' },
+      { icon: '✈️', label: 'Travel & hotels', value: 'travel' },
+      { icon: '⛽', label: 'Fuel & Salik', value: 'fuel' },
+      { icon: '📚', label: 'School fees', value: 'education' },
+      { icon: '🎬', label: 'Entertainment', value: 'entertainment' },
+      { icon: '💊', label: 'Bills & utilities', value: 'bills' },
+    ],
+    key: 'spending'
+  },
+  {
+    q: 'What is your monthly salary?',
+    sub: 'Used only to filter eligible cards',
+    multi: false,
+    type: 'salary',
+    options: [
+      { label: 'AED 5,000–7,999', value: 5000, sublabel: 'Entry level' },
+      { label: 'AED 8,000–11,999', value: 8000, sublabel: 'Mid level' },
+      { label: 'AED 12,000–19,999', value: 12000, sublabel: 'Professional' },
+      { label: 'AED 20,000–34,999', value: 20000, sublabel: 'Senior' },
+      { label: 'AED 35,000+', value: 35000, sublabel: 'Executive' },
+    ],
+    key: 'salary'
+  },
+  {
+    q: 'How often do you travel internationally?',
+    sub: 'Helps us weight travel benefits',
+    multi: false,
+    options: [
+      { icon: '🏠', label: 'Rarely or never', value: 'never' },
+      { icon: '🗓️', label: 'A few times a year', value: 'occasional' },
+      { icon: '✈️', label: 'Monthly or more', value: 'frequent' },
+    ],
+    key: 'travel_freq'
+  },
+  {
+    q: 'How important is avoiding an annual fee?',
+    sub: 'Some premium cards justify their cost',
+    multi: false,
+    options: [
+      { icon: '🚫', label: 'Very important — free card only', value: 'no_fee' },
+      { icon: '🤔', label: 'Prefer low fee, open to waiver', value: 'low_fee' },
+      { icon: '💳', label: "Happy to pay for better benefits", value: 'any_fee' },
+      { icon: '💎', label: 'Want premium regardless of fee', value: 'premium' },
+    ],
+    key: 'fee_pref'
+  },
+  {
+    q: 'Are you looking for an Islamic card?',
+    sub: 'Sharia-compliant covered cards',
+    multi: false,
+    options: [
+      { icon: '☪️', label: 'Yes, Islamic / Sharia-compliant', value: 'yes' },
+      { icon: '🔄', label: 'Show me both options', value: 'both' },
+      { icon: '❌', label: 'No preference', value: 'no' },
+    ],
+    key: 'islamic'
+  }
+];
+
+// ── MOTION UTILITIES ──
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const IS_TOUCH = window.matchMedia('(hover: none), (max-width: 768px)').matches;
+
+// Lightweight spring interpolation for magnetic / tilt effects
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+// ── AMBIENT PARTICLE FIELD (single canvas, perf-conscious) ──
+(function initParticles() {
+  const canvas = document.getElementById('particleCanvas');
+  if (!canvas || REDUCED_MOTION || IS_TOUCH) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let particles = [];
+  let mouseX = -9999, mouseY = -9999;
+  let running = true;
+
+  function resize() {
+    w = canvas.clientWidth = window.innerWidth;
+    h = canvas.clientHeight = window.innerHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.round((w * h) / 22000);
+    particles = Array.from({ length: Math.min(count, 90) }, () => ({
+      x: Math.random() * w, y: Math.random() * h,
+      r: Math.random() * 1.4 + 0.4,
+      baseOpacity: Math.random() * 0.35 + 0.08,
+      vx: (Math.random() - 0.5) * 0.06,
+      vy: (Math.random() - 0.5) * 0.06,
+      hue: Math.random() > 0.5 ? '201,168,76' : '18,196,172'
+    }));
+  }
+  window.addEventListener('resize', resize, { passive: true });
+  window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+  resize();
+
+  function tick() {
+    if (!running) return;
+    ctx.clearRect(0, 0, w, h);
+    for (const p of particles) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+      const dx = p.x - mouseX, dy = p.y - mouseY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const influence = dist < 160 ? (1 - dist / 160) * 0.5 : 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r + influence * 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.hue},${p.baseOpacity + influence * 0.4})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+  document.addEventListener('visibilitychange', () => {
+    running = !document.hidden;
+    if (running) requestAnimationFrame(tick);
+  });
+})();
+
+// ── CURSOR LIGHT (smoothed follow) ──
+(function initCursorGlow() {
+  const glow = document.getElementById('cursorGlow');
+  if (!glow || REDUCED_MOTION || IS_TOUCH) return;
+  let tx = window.innerWidth / 2, ty = window.innerHeight / 2;
+  let cx = tx, cy = ty;
+  let active = false;
+  window.addEventListener('mousemove', (e) => {
+    tx = e.clientX; ty = e.clientY;
+    if (!active) { active = true; glow.classList.add('active'); }
+  }, { passive: true });
+  window.addEventListener('mouseleave', () => { active = false; glow.classList.remove('active'); });
+  function raf() {
+    cx = lerp(cx, tx, 0.09); cy = lerp(cy, ty, 0.09);
+    glow.style.transform = `translate(${cx}px, ${cy}px)`;
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+})();
+
+// ── NAV SCROLL STATE ──
+(function initNavScroll() {
+  const nav = document.getElementById('mainNav');
+  if (!nav) return;
+  function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+// ── MAGNETIC BUTTONS ──
+(function initMagnetic() {
+  if (REDUCED_MOTION || IS_TOUCH) return;
+  document.addEventListener('mousemove', (e) => {
+    document.querySelectorAll('.magnetic').forEach(btn => {
+      const r = btn.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const dx = e.clientX - cx, dy = e.clientY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const radius = 90;
+      if (dist < radius) {
+        const pull = (1 - dist / radius) * 5;
+        btn.style.transform = `translate(${(dx / dist) * pull || 0}px, ${(dy / dist) * pull || 0}px)`;
+      } else {
+        btn.style.transform = '';
+      }
+    });
+  }, { passive: true });
+})();
+
+// ── 3D TILT (hero cards + grid cards) — shared, perf-conscious rAF loop ──
+(function initTilt() {
+  if (REDUCED_MOTION || IS_TOUCH) return;
+  let targets = [];
+  function refresh() {
+    targets = Array.from(document.querySelectorAll('[data-tilt], .card-item'));
+  }
+  refresh();
+  document.addEventListener('mousemove', (e) => {
+    for (const el of targets) {
+      if (!el.isConnected) continue;
+      const r = el.getBoundingClientRect();
+      if (e.clientX < r.left - 40 || e.clientX > r.right + 40 || e.clientY < r.top - 40 || e.clientY > r.bottom + 40) continue;
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      const rx = (0.5 - py) * (el.classList.contains('card-item') ? 5 : 10);
+      const ry = (px - 0.5) * (el.classList.contains('card-item') ? 5 : 10);
+      el.style.setProperty('--mx', (px * 100) + '%');
+      el.style.setProperty('--my', (py * 100) + '%');
+      if (el.hasAttribute('data-tilt')) {
+        el.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(10px)`;
+      } else {
+        el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      }
+    }
+  }, { passive: true });
+  document.addEventListener('mouseleave', () => {
+    targets.forEach(el => { el.style.transform = ''; });
+  });
+  // Re-scan when the card grid re-renders
+  window.__refreshTilt = refresh;
+})();
+
+// ── SCROLL REVEAL ──
+function initScrollReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+}
+
+// ── HOW-IT-WORKS CONNECTING LINE ──
+function initStepsLine() {
+  const grid = document.getElementById('stepsGrid');
+  const fill = document.getElementById('stepsLineFill');
+  if (!grid || !fill) return;
+  const cards = grid.querySelectorAll('.step-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        fill.style.width = '100%';
+        cards.forEach((c, i) => setTimeout(() => c.classList.add('active'), i * 220));
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  observer.observe(grid);
+}
+
+// ── COUNT-UP ANIMATION ──
+function animateCount(el, target, opts = {}) {
+  if (!el) return;
+  const dur = opts.duration || 900;
+  const suffix = opts.suffix || '';
+  const start = performance.now();
+  if (REDUCED_MOTION) { el.textContent = target + suffix; return; }
+  function frame(now) {
+    const t = Math.min(1, (now - start) / dur);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(target * eased) + suffix;
+    if (t < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ── STATE ──
+let quizAnswers = {};
+let quizStep = 0;
+let quizDone = false;
+let quizMultiSelected = {};
+let cardsToCompare = [];
+let activeCategory = '';
+let visibleCount = 12;
+let filteredCards = [...UAE_CARDS];
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  renderQuiz();
+  renderCategories();
+  renderBanks();
+  renderCards();
+  renderFAQ();
+  initScrollReveal();
+  initStepsLine();
+  injectDynamicCounts();
+  populateBankFilter();
+});
+
+// ── BANK FILTER (data-driven, alphabetical) ──
+function populateBankFilter() {
+  const select = document.getElementById('bankFilter');
+  if (!select) return;
+  const names = [...BANKS].map(b => b.name).sort((a, b) => a.localeCompare(b));
+  select.innerHTML = '<option value="">All Banks</option>' +
+    names.map(n => `<option>${n}</option>`).join('');
+}
+
+// ── DYNAMIC CARD/BANK COUNTS ──
+// Never hard-code "100+" or any other figure in copy — always derive it from
+// the actual verified UAE_CARDS database so the site never overstates coverage.
+function injectDynamicCounts() {
+  const cardCount = UAE_CARDS.length;
+  const bankCount = new Set(UAE_CARDS.map(c => c.bank)).size;
+  const cardLabel = cardCount + '+';
+  ['heroSubCount', 'discoverySubCount', 'quizStepCount'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = cardLabel;
+  });
+  animateCount(document.getElementById('heroCardCount'), cardCount, { suffix: '+', duration: 1400 });
+  animateCount(document.getElementById('heroBankCount'), bankCount, { duration: 1400 });
+}
+
+// ── SCROLL UTILS ──
+function scrollToSection(id) {
+  const el = document.getElementById(id === 'compare' ? 'browse' : id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function toggleMobileMenu() {
+  const links = document.getElementById('navLinks');
+  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+  if (links.style.display === 'flex') {
+    Object.assign(links.style, {
+      position: 'fixed', top: '70px', left: 0, right: 0,
+      background: 'rgba(6,10,20,0.98)', flexDirection: 'column',
+      padding: '24px', gap: '20px', backdropFilter: 'blur(20px)',
+      borderBottom: '1px solid rgba(255,255,255,0.08)'
+    });
+  }
+}
+
+// ── CATEGORIES ──
+function renderCategories() {
+  const grid = document.getElementById('categoriesGrid');
+  grid.innerHTML = CATEGORIES.map((c, i) => `
+    <div class="cat-card reveal" style="--i:${i}" onclick="setCategoryFilter('${c.key}'); scrollToSection('browse');">
+      <div class="cat-icon">${c.icon}</div>
+      <div class="cat-name">${c.label}</div>
+      <div class="cat-count">${c.count} cards</div>
+    </div>
+  `).join('');
+  initScrollReveal();
+}
+
+// ── BANKS ──
+function renderBanks() {
+  const grid = document.getElementById('banksGrid');
+  grid.innerHTML = BANKS.map((b, i) => `
+    <div class="bank-card reveal" style="--i:${i}" onclick="setBankFilter('${b.name}'); scrollToSection('browse');">
+      <div class="bank-logo" style="background:${b.color};">${b.short}</div>
+      <div class="bank-name">${b.name}</div>
+      <div class="bank-cards">${b.cards} cards</div>
+    </div>
+  `).join('');
+  initScrollReveal();
+}
+
+// ── QUIZ ──
+function renderQuiz(direction) {
+  const container = document.getElementById('quizContainer');
+  if (quizStep >= QUIZ_STEPS.length) {
+    if (!quizDone) { runMatchAnimation(); }
+    return;
+  }
+  const step = QUIZ_STEPS[quizStep];
+  const progress = ((quizStep) / QUIZ_STEPS.length) * 100;
+  const isLast = quizStep === QUIZ_STEPS.length - 1;
+  const isSalary = step.type === 'salary';
+  const selections = quizMultiSelected[quizStep] || new Set();
+  const singleSel = quizAnswers[step.key];
+
+  let optionsHtml = '';
+  if (isSalary) {
+    optionsHtml = `<div class="salary-grid">${step.options.map((o, i) => `
+      <div class="salary-option ${singleSel === o.value ? 'selected' : ''}" style="--i:${i}" onmousemove="tiltInline(event,this)" onclick="selectSingle(${quizStep}, ${o.value}, '${step.key}')">
+        <div class="salary-option-amount">${o.label}</div>
+        <div class="salary-option-label">${o.sublabel}</div>
+      </div>
+    `).join('')}</div>`;
+  } else if (step.multi) {
+    optionsHtml = `<div class="quiz-options">${step.options.map((o, i) => `
+      <div class="quiz-option ${selections.has(o.value) ? 'selected' : ''}" style="--i:${i}" onmousemove="tiltInline(event,this)" onclick="toggleMulti(${quizStep}, '${o.value}', '${step.key}')" tabindex="0" role="checkbox" aria-checked="${selections.has(o.value)}">
+        <span class="quiz-option-icon">${o.icon || '●'}</span>
+        ${o.label}
+        <span class="quiz-option-check"></span>
+      </div>
+    `).join('')}</div>`;
+  } else {
+    optionsHtml = `<div class="quiz-options single-col">${step.options.map((o, i) => `
+      <div class="quiz-option ${singleSel === o.value ? 'selected' : ''}" style="--i:${i}" onmousemove="tiltInline(event,this)" onclick="selectSingle(${quizStep}, '${o.value}', '${step.key}')" tabindex="0" role="radio" aria-checked="${singleSel === o.value}">
+        <span class="quiz-option-icon">${o.icon || '●'}</span>
+        ${o.label}
+        <span class="quiz-option-check"></span>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  const canProceed = isSalary ? !!singleSel : (step.multi ? selections.size > 0 : !!singleSel);
+
+  const html = `
+    <div class="quiz-progress">
+      <div class="quiz-step-num"><span class="cur">${String(quizStep + 1).padStart(2, '0')}</span>&nbsp;/&nbsp;${String(QUIZ_STEPS.length).padStart(2, '0')}</div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${progress}%"></div></div>
+    </div>
+    <div class="quiz-question-inner" id="quizQInner">
+      <div class="quiz-question">${step.q}</div>
+      <div class="quiz-subtitle">${step.sub}</div>
+      ${optionsHtml}
+      <div class="quiz-actions">
+        ${quizStep > 0 ? `<button class="quiz-btn-back" onclick="quizBack()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button>` : '<div></div>'}
+        <button class="quiz-btn-next ${canProceed ? 'ready' : ''}" onclick="quizNext()" ${!canProceed ? 'disabled' : ''}>
+          ${isLast ? 'Find My Cards' : 'Next'}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+
+  const existing = document.getElementById('quizQInner');
+  if (existing && direction) {
+    existing.classList.add('leaving');
+    setTimeout(() => { container.innerHTML = html; }, 240);
+  } else {
+    container.innerHTML = html;
+  }
+}
+
+function tiltInline(e, el) {
+  if (REDUCED_MOTION || IS_TOUCH) return;
+  const r = el.getBoundingClientRect();
+  el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+  el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+}
+
+function toggleMulti(step, value, key) {
+  if (!quizMultiSelected[step]) quizMultiSelected[step] = new Set();
+  const s = quizMultiSelected[step];
+  s.has(value) ? s.delete(value) : s.add(value);
+  quizAnswers[key] = Array.from(s);
+  renderQuiz();
+}
+function selectSingle(step, value, key) {
+  quizAnswers[key] = value;
+  renderQuiz();
+  const s = QUIZ_STEPS[quizStep];
+  if (!s.multi && s.type !== 'salary') {
+    setTimeout(() => quizNext(), 320);
+  }
+}
+function quizNext() {
+  const step = QUIZ_STEPS[quizStep];
+  const key = step.key;
+  if (step.multi) {
+    const s = quizMultiSelected[quizStep] || new Set();
+    if (s.size === 0) return;
+    quizAnswers[key] = Array.from(s);
+  }
+  if (!quizAnswers[key] && quizAnswers[key] !== 0) return;
+  quizStep++;
+  renderQuiz('forward');
+}
+function quizBack() {
+  quizStep = Math.max(0, quizStep - 1);
+  quizDone = false;
+  renderQuiz('back');
+}
+
+// ── MATCHING ENGINE LOADER ──
+function runMatchAnimation() {
+  quizDone = true;
+  const container = document.getElementById('quizContainer');
+  const nodes = [0, 60, 120, 180, 240, 300].map(a =>
+    `<div class="match-engine-node" style="top:50%;left:50%;animation-delay:${-a / 90}s"></div>`
+  ).join('');
+  container.innerHTML = `
+    <div class="quiz-loading">
+      <div class="match-engine">
+        <div class="match-engine-ring"></div>
+        <div class="match-engine-ring r2"></div>
+        <div class="match-engine-ring r3"></div>
+        ${nodes}
+        <div class="match-engine-core">C</div>
+      </div>
+      <div class="quiz-loading-title">Finding your best matches</div>
+      <div class="quiz-loading-sub">Comparing ${UAE_CARDS.length}+ UAE credit cards</div>
+      <ul class="loading-steps" id="loadingSteps">
+        <li class="loading-step" id="ls1"><span class="loading-step-dot"></span>Analyzing your spending preferences</li>
+        <li class="loading-step" id="ls2"><span class="loading-step-dot"></span>Checking salary eligibility</li>
+        <li class="loading-step" id="ls3"><span class="loading-step-dot"></span>Comparing reward values</li>
+        <li class="loading-step" id="ls4"><span class="loading-step-dot"></span>Calculating match scores</li>
+      </ul>
+    </div>
+  `;
+
+  const steps = ['ls1', 'ls2', 'ls3', 'ls4'];
+  let i = 0;
+  function activateNext() {
+    if (i > 0) document.getElementById(steps[i - 1]).classList.replace('active', 'done');
+    if (i < steps.length) {
+      document.getElementById(steps[i]).classList.add('active');
+      i++;
+      setTimeout(activateNext, 650);
+    } else {
+      setTimeout(() => showResults(), 500);
+    }
+  }
+  activateNext();
+}
+
+// ── MATCHING ALGORITHM ── (unchanged — do not alter scoring logic)
+function calculateMatchScore(card, answers) {
+  let score = 0;
+  const maxScore = 100;
+
+  // 1. Salary eligibility (hard gate — if not eligible, max 30)
+  const salary = answers.salary || 5000;
+  if (card.minSalary > salary) {
+    return { score: Math.max(5, 30 - Math.round((card.minSalary - salary) / 1000 * 3)), eligible: false };
+  }
+
+  // 2. Priority alignment (35%)
+  const priorities = answers.priorities || [];
+  const cats = card.categories || [];
+  const priorityOverlap = priorities.filter(p => cats.includes(p)).length;
+  score += (priorityOverlap / Math.max(priorities.length, 1)) * 35;
+
+  // 3. Fee preference (15%)
+  const feePref = answers.fee_pref;
+  if (feePref === 'no_fee' && card.annualFee === 0) score += 15;
+  else if (feePref === 'low_fee' && card.annualFee <= 500) score += 12;
+  else if (feePref === 'any_fee' || feePref === 'premium') score += 10;
+  else if (card.annualFee === 0) score += 8;
+
+  // 4. Islamic preference (10%)
+  const islamicPref = answers.islamic;
+  if (islamicPref === 'yes' && card.islamicCard) score += 10;
+  else if (islamicPref === 'yes' && !card.islamicCard) score -= 5;
+  else if (islamicPref === 'both') score += 5;
+  else if (islamicPref !== 'yes') score += 5;
+
+  // 5. Travel frequency (20%)
+  const travelFreq = answers.travel_freq;
+  if (travelFreq === 'frequent' && (card.loungeAccess || cats.includes('travel'))) score += 20;
+  else if (travelFreq === 'occasional' && cats.includes('travel')) score += 12;
+  else if (travelFreq === 'never' && !cats.includes('travel')) score += 10;
+  else if (travelFreq !== 'frequent') score += 5;
+
+  // 6. Spending category alignment (20%)
+  const spending = answers.spending || [];
+  const spendMap = { groceries: ['cashback', 'free'], restaurants: ['dining', 'cashback'], online: ['shopping', 'cashback'], travel: ['travel', 'miles'], fuel: ['fuel', 'cashback'], education: ['cashback'], entertainment: ['premium', 'dining'], bills: ['cashback'] };
+  let spendScore = 0;
+  spending.forEach(s => {
+    const mapped = spendMap[s] || [];
+    if (mapped.some(m => cats.includes(m))) spendScore += 3;
+  });
+  score += Math.min(20, spendScore);
+
+  // Clamp to 0-100
+  score = Math.round(Math.max(0, Math.min(100, score)));
+  return { score, eligible: true };
+}
+
+function showResults() {
+  const answers = quizAnswers;
+  const ranked = UAE_CARDS.map(card => {
+    const { score, eligible } = calculateMatchScore(card, answers);
+    return { ...card, matchScore: score, eligible };
+  }).filter(c => c.eligible).sort((a, b) => b.matchScore - a.matchScore);
+
+  const container = document.getElementById('quizContainer');
+
+  const whyReasons = (card) => {
+    const reasons = [];
+    const ans = answers;
+    const cats = card.categories || [];
+    if (card.minSalary <= (ans.salary || 5000)) reasons.push({ text: 'Eligible for your salary', pro: true });
+    if (cats.includes('cashback') && (ans.priorities || []).includes('cashback')) reasons.push({ text: 'Strong cashback rewards', pro: true });
+    if (card.annualFee === 0 && (ans.fee_pref === 'no_fee' || ans.fee_pref === 'low_fee')) reasons.push({ text: 'No annual fee', pro: true });
+    if (card.islamicCard && ans.islamic === 'yes') reasons.push({ text: 'Sharia-compliant card', pro: true });
+    if (card.loungeAccess && (ans.priorities || []).includes('lounge')) reasons.push({ text: 'Airport lounge included', pro: true });
+    if (cats.includes('dining') && (ans.spending || []).includes('restaurants')) reasons.push({ text: 'Great dining rewards', pro: true });
+    if (card.annualFee > 1000 && ans.fee_pref === 'no_fee') reasons.push({ text: 'High annual fee for your preference', pro: false });
+    return reasons.slice(0, 4);
+  };
+
+  container.innerHTML = `
+    <div class="results-header">
+      <div class="quiz-progress">
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:100%"></div></div>
+        <div class="quiz-step-num">Done</div>
+      </div>
+      <div class="results-title">Your top ${Math.min(5, ranked.length)} matches</div>
+      <div class="results-subtitle">Ranked from ${UAE_CARDS.length}+ UAE cards based on your profile</div>
+    </div>
+    ${ranked.slice(0, 5).map((card, i) => {
+      const reasons = whyReasons(card);
+      return `
+      <div class="result-card ${i === 0 ? 'top-pick' : ''}" style="animation-delay:${i * 0.12}s">
+        ${i === 0 ? '<div class="best-match-badge">BEST MATCH</div>' : ''}
+        <div class="result-card-header">
+          <div class="result-card-rank">
+            <div class="rank-badge">#${i + 1}</div>
+            <div>
+              <div style="font-size:0.75rem;color:var(--text-faint);">${card.bank}</div>
+              <div style="font-size:0.9rem;font-weight:700;">${card.name}</div>
+            </div>
+          </div>
+          <div class="match-score">
+            <div class="match-pct num" data-target="${card.matchScore}">0%</div>
+            <div class="match-label">Match</div>
+          </div>
+        </div>
+        <div class="result-card-body">
+          <div class="result-info-item">
+            <div class="result-info-label">Annual Fee</div>
+            <div class="result-info-value">${card.annualFee === 0 ? 'Free for Life' : 'AED ' + card.annualFee.toLocaleString()}</div>
+          </div>
+          <div class="result-info-item">
+            <div class="result-info-label">Min. Salary</div>
+            <div class="result-info-value">AED ${card.minSalary.toLocaleString()}</div>
+          </div>
+          <div class="result-info-item">
+            <div class="result-info-label">Top Reward</div>
+            <div class="result-info-value" style="font-size:0.75rem;">${card.cashbackHighlight}</div>
+          </div>
+        </div>
+        <div class="result-benefits">
+          ${card.categories.map(c => `<span class="benefit-tag">${CATEGORIES.find(x => x.key === c)?.icon || ''} ${CATEGORIES.find(x => x.key === c)?.label || c}</span>`).join('')}
+        </div>
+        <div class="why-match">
+          <div class="why-match-title">Why this matched you</div>
+          <div class="why-match-items">
+            ${reasons.map((r, wi) => `<div class="why-match-item ${r.pro ? 'pro' : 'con'}" style="--wi:${wi}">${r.pro ? '✓' : '•'} ${r.text}</div>`).join('')}
+          </div>
+        </div>
+        <div class="result-card-actions">
+          <button class="btn-view" onclick="openCardModal('${card.id}')">View Details</button>
+          <button class="btn-apply" onclick="applyCard('${card.id}')">
+            Apply Now
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </button>
+        </div>
+      </div>
+      `}).join('')}
+    <div style="text-align:center; margin-top:24px; padding-top:24px; border-top:1px solid var(--border);">
+      <div style="font-size:0.875rem; color:var(--text-dim); margin-bottom:16px;">Want to see all ${ranked.length} eligible cards?</div>
+      <button class="btn-secondary" onclick="scrollToSection('browse')" style="display:inline-flex;">
+        Browse All Matching Cards
+      </button>
+      <button class="btn-secondary" onclick="resetQuiz()" style="display:inline-flex; margin-left:12px;">
+        Start Over
+      </button>
+    </div>
+  `;
+
+  // Animate match-score count-ups once each card has settled in
+  container.querySelectorAll('.match-pct').forEach((el, i) => {
+    const target = parseInt(el.dataset.target, 10);
+    setTimeout(() => animateCount(el, target, { suffix: '%', duration: 900 }), i * 120 + 350);
+  });
+}
+
+function resetQuiz() {
+  quizStep = 0; quizDone = false;
+  quizAnswers = {}; quizMultiSelected = {};
+  renderQuiz();
+}
+
+// ── CARD GRID (with FLIP-style layout transitions on filter) ──
+function renderCards(animateFlip) {
+  const grid = document.getElementById('cardsGrid');
+  const visible = filteredCards.slice(0, visibleCount);
+
+  // Capture FIRST positions for FLIP
+  let firstRects = null;
+  if (animateFlip && !REDUCED_MOTION) {
+    firstRects = new Map();
+    grid.querySelectorAll('.card-item').forEach(el => {
+      firstRects.set(el.dataset.id, el.getBoundingClientRect());
+    });
+  }
+
+  if (visible.length === 0) {
+    grid.innerHTML = '<div class="cards-empty">No cards match your filters. Try adjusting the criteria above.</div>';
+    document.getElementById('loadMoreBtn').style.display = 'none';
+    updateFilterResultCount();
+    return;
+  }
+
+  grid.innerHTML = visible.map(card => renderCardItem(card)).join('');
+  document.getElementById('loadMoreBtn').style.display = filteredCards.length > visibleCount ? 'block' : 'none';
+  updateFilterResultCount();
+  if (window.__refreshTilt) window.__refreshTilt();
+
+  // Play LAST + INVERT + PLAY for cards that existed before
+  if (firstRects && !REDUCED_MOTION) {
+    grid.querySelectorAll('.card-item').forEach(el => {
+      const id = el.dataset.id;
+      const first = firstRects.get(id);
+      if (first) {
+        const last = el.getBoundingClientRect();
+        const dx = first.left - last.left, dy = first.top - last.top;
+        if (dx || dy) {
+          el.style.transition = 'none';
+          el.style.transform = `translate(${dx}px, ${dy}px)`;
+          requestAnimationFrame(() => {
+            el.style.transition = 'transform 0.4s var(--ease-out)';
+            el.style.transform = '';
+          });
+        }
+      } else {
+        el.classList.add('filtered-in');
+      }
+    });
+  }
+}
+
+function updateFilterResultCount() {
+  const el = document.getElementById('filterResultCount');
+  if (!el) return;
+  el.textContent = `Showing ${Math.min(visibleCount, filteredCards.length)} of ${filteredCards.length} cards`;
+}
+
+function renderCardItem(card) {
+  const inCompare = cardsToCompare.some(c => c.id === card.id);
+  const tagHtml = card.categories.slice(0, 3).map(c => {
+    const cat = CATEGORIES.find(x => x.key === c);
+    const cls = c === 'cashback' ? 'tag-cashback' : c === 'travel' ? 'tag-travel' : c === 'miles' ? 'tag-miles' : c === 'dining' ? 'tag-dining' : c === 'free' ? 'tag-free' : c === 'premium' ? 'tag-premium' : c === 'islamic' ? 'tag-islamic' : 'tag-shopping';
+    return `<span class="card-tag ${cls}">${cat?.icon || ''} ${cat?.label || c}</span>`;
+  }).join('');
+
+  return `
+    <div class="card-item" data-id="${card.id}" onclick="openCardModal('${card.id}')">
+      <div class="card-item-bank">${card.bank}</div>
+      <div class="card-item-name">${card.name} ${card.isNew ? '<span class="badge badge-new">New</span>' : ''}</div>
+      <div class="card-item-mini" style="background:${card.gradient}">
+        <div class="card-mini-overlay"></div>
+        <div>
+          <div class="card-mini-chip"></div>
+          <div class="card-mini-num">•••• •••• •••• ####</div>
+        </div>
+      </div>
+      <div class="card-item-specs">
+        <div>
+          <div class="card-spec-label">Annual Fee</div>
+          <div class="card-spec-value">${card.annualFee === 0 ? 'Free' : 'AED ' + card.annualFee.toLocaleString()}</div>
+        </div>
+        <div>
+          <div class="card-spec-label">Min. Salary</div>
+          <div class="card-spec-value">AED ${card.minSalary.toLocaleString()}</div>
+        </div>
+        <div>
+          <div class="card-spec-label">Network</div>
+          <div class="card-spec-value">${card.network}</div>
+        </div>
+        <div>
+          <div class="card-spec-label">Lounge</div>
+          <div class="card-spec-value">${card.loungeAccess ? 'Yes' : '—'}</div>
+        </div>
+      </div>
+      <div class="card-item-tags">${tagHtml}</div>
+      <div class="card-highlight">${card.cashbackHighlight}</div>
+      <div class="card-item-footer">
+        <button class="card-compare-btn ${inCompare ? 'added' : ''}" onclick="event.stopPropagation(); toggleCompare('${card.id}', event)">
+          ${inCompare ? '✓ Added' : '+ Compare'}
+        </button>
+        <button class="card-apply-mini" onclick="event.stopPropagation(); applyCard('${card.id}')">Apply →</button>
+      </div>
+    </div>
+  `;
+}
+
+function filterCards() {
+  const search = document.getElementById('cardSearch').value.toLowerCase();
+  const bank = document.getElementById('bankFilter').value;
+  const salaryVal = document.getElementById('salaryFilter').value;
+  const feeVal = document.getElementById('feeFilter').value;
+  const sort = document.getElementById('sortFilter').value;
+
+  filteredCards = UAE_CARDS.filter(card => {
+    if (bank && !card.bank.toLowerCase().includes(bank.toLowerCase())) return false;
+    if (salaryVal && card.minSalary > parseInt(salaryVal)) return false;
+    if (feeVal === '0' && card.annualFee !== 0) return false;
+    if (feeVal === '500' && card.annualFee >= 500) return false;
+    if (feeVal === '1000' && card.annualFee >= 1000) return false;
+    if (activeCategory && !card.categories.includes(activeCategory)) return false;
+    if (search) {
+      const searchStr = (card.bank + card.name + card.cashback + card.categories.join(' ') + card.cashbackHighlight).toLowerCase();
+      if (!searchStr.includes(search)) return false;
+    }
+    return true;
+  });
+
+  filteredCards.sort((a, b) => {
+    if (sort === 'fee_asc') return a.annualFee - b.annualFee;
+    if (sort === 'salary_asc') return a.minSalary - b.minSalary;
+    if (sort === 'name') return a.name.localeCompare(b.name);
+    return (b.rating || 4) - (a.rating || 4); // default: rating
+  });
+
+  visibleCount = 12;
+  renderCards(true);
+}
+
+function setCategoryFilter(cat) {
+  activeCategory = cat;
+  document.querySelectorAll('.filter-chip').forEach(el => {
+    el.classList.toggle('active', el.dataset.cat === cat);
+  });
+  filterCards();
+}
+function setBankFilter(bank) {
+  document.getElementById('bankFilter').value = bank;
+  filterCards();
+}
+function loadMore() {
+  const btn = document.getElementById('loadMoreBtn').querySelector('button');
+  const original = btn.textContent;
+  btn.textContent = 'Loading…';
+  btn.disabled = true;
+  setTimeout(() => {
+    visibleCount += 12;
+    renderCards();
+    btn.disabled = false;
+    btn.textContent = original;
+  }, 350);
+}
+
+// ── COMPARE (with fly-to-dock interaction) ──
+function toggleCompare(id, evt) {
+  const card = UAE_CARDS.find(c => c.id === id);
+  if (!card) return;
+  const idx = cardsToCompare.findIndex(c => c.id === id);
+  const adding = idx < 0;
+
+  if (adding) {
+    if (cardsToCompare.length >= 4) {
+      alert('You can compare up to 4 cards at once.');
+      return;
+    }
+    cardsToCompare.push(card);
+    if (evt) flyCardToCompare(evt.target.closest('.card-item') || evt.target);
+  } else {
+    cardsToCompare.splice(idx, 1);
+  }
+  renderCards();
+  updateCompareBar();
+}
+
+function flyCardToCompare(sourceEl) {
+  if (REDUCED_MOTION || !sourceEl) return;
+  const dock = document.getElementById('compareBar');
+  const dockRect = dock.getBoundingClientRect();
+  const srcRect = sourceEl.getBoundingClientRect();
+  const clone = sourceEl.cloneNode(true);
+  clone.classList.add('fly-clone');
+  clone.style.left = srcRect.left + 'px';
+  clone.style.top = srcRect.top + 'px';
+  clone.style.width = srcRect.width + 'px';
+  clone.style.height = srcRect.height + 'px';
+  clone.style.margin = '0';
+  document.body.appendChild(clone);
+  requestAnimationFrame(() => {
+    clone.style.left = (dockRect.left + 40) + 'px';
+    clone.style.top = (dockRect.top + 10) + 'px';
+    clone.style.width = '120px';
+    clone.style.height = '46px';
+    clone.style.opacity = '0.15';
+    clone.style.transform = 'scale(0.9)';
+  });
+  setTimeout(() => clone.remove(), 680);
+}
+
+function updateCompareBar() {
+  const bar = document.getElementById('compareBar');
+  const slots = document.getElementById('compareSlots');
+  const count = document.getElementById('compareCount');
+  const btn = document.getElementById('compareBtn');
+
+  bar.classList.toggle('visible', cardsToCompare.length > 0);
+  count.textContent = `${cardsToCompare.length} of 4 selected`;
+  btn.disabled = cardsToCompare.length < 2;
+
+  const allSlots = [];
+  for (let i = 0; i < 4; i++) {
+    const card = cardsToCompare[i];
+    allSlots.push(card
+      ? `<div class="compare-slot filled">${card.bank}<br>${card.name.substring(0, 20)}${card.name.length > 20 ? '…' : ''} <span class="compare-slot-remove" onclick="toggleCompare('${card.id}')">×</span></div>`
+      : `<div class="compare-slot">+ Add card</div>`
+    );
+  }
+  slots.innerHTML = allSlots.join('');
+}
+
+function clearComparison() {
+  cardsToCompare = [];
+  renderCards();
+  updateCompareBar();
+  document.getElementById('compareSection').classList.remove('visible');
+}
+
+function openComparison() {
+  if (cardsToCompare.length < 2) return;
+  const section = document.getElementById('compareSection');
+  section.classList.add('visible');
+  buildComparisonTable();
+  section.scrollIntoView({ behavior: 'smooth' });
+}
+
+function closeComparison() {
+  document.getElementById('compareSection').classList.remove('visible');
+}
+
+function buildComparisonTable() {
+  const cards = cardsToCompare;
+  const rows = [
+    ['Annual Fee', c => c.annualFee === 0 ? 'Free ✨' : 'AED ' + c.annualFee.toLocaleString(), 'min'],
+    ['Min. Salary', c => 'AED ' + c.minSalary.toLocaleString(), 'min'],
+    ['Network', c => c.network, null],
+    ['Top Reward', c => c.cashbackHighlight, null],
+    ['Airport Lounge', c => c.loungeAccess ? (typeof c.loungeVisits === 'number' ? `✓ ${c.loungeVisits} visits/yr` : '✓ ' + c.loungeVisits) : '✕ None', 'max_lounge'],
+    ['Travel Insurance', c => c.travelInsurance ? '✓ Included' : '✕ None', 'max_bool'],
+    ['Islamic Card', c => c.islamicCard ? '✓ Sharia-compliant' : '✕ Conventional', null],
+    ['Best For', c => c.bestFor, null],
+    ['Our Rating', c => '⭐ ' + c.rating + '/5', 'max'],
+  ];
+
+  const thead = `<thead><tr>
+    <th></th>
+    ${cards.map(c => `<th>
+      <div style="font-size:0.7rem;color:var(--text-dim);">${c.bank}</div>
+      <div style="font-size:0.85rem;">${c.name.substring(0, 25)}</div>
+    </th>`).join('')}
+  </tr></thead>`;
+
+  const tbody = `<tbody>${rows.map(([label, getter, type]) => {
+    const values = cards.map(c => getter(c));
+    let winners = [];
+    if (type === 'min') {
+      const nums = values.map(v => parseFloat(v.replace(/[^0-9.]/g, '')) || 0);
+      const min = Math.min(...nums);
+      winners = nums.map(n => n === min);
+    } else if (type === 'max') {
+      const nums = values.map(v => parseFloat(v.replace(/[^0-9.]/g, '')) || 0);
+      const max = Math.max(...nums);
+      winners = nums.map(n => n === max);
+    } else if (type === 'max_bool') {
+      winners = values.map(v => v.startsWith('✓'));
+    } else if (type === 'max_lounge') {
+      winners = values.map(v => v.includes('✓'));
+    }
+    return `<tr>
+      <td>${label}</td>
+      ${values.map((v, i) => `<td class="${winners[i] ? 'comparison-winner' : ''}">${v}</td>`).join('')}
+    </tr>`;
+  }).join('')}
+  <tr>
+    <td>Apply</td>
+    ${cards.map(c => `<td><button class="btn-apply" style="width:100%;font-size:0.75rem;padding:8px 10px;" onclick="applyCard('${c.id}')">Apply at ${c.bank}</button></td>`).join('')}
+  </tr>
+  </tbody>`;
+
+  document.getElementById('comparisonTable').innerHTML = thead + tbody;
+}
+
+// ── CARD MODAL ──
+function openCardModal(id) {
+  const card = UAE_CARDS.find(c => c.id === id);
+  if (!card) return;
+  const modal = document.getElementById('cardModal');
+  const body = document.getElementById('modalBody');
+
+  const inCompare = cardsToCompare.some(c => c.id === id);
+
+  body.innerHTML = `
+    <div class="modal-card-visual" style="background:${card.gradient}">
+      <div>
+        <div class="modal-chip"></div>
+        <div class="modal-card-bank">${card.bank}</div>
+        <div class="modal-card-name">${card.name}</div>
+      </div>
+      <div class="modal-card-network">${card.network} ${card.islamicCard ? '• Islamic' : ''}</div>
+      <div class="modal-card-stripe"></div>
+    </div>
+
+    <div class="modal-verified">
+      📅 Last verified: ${card.lastVerified} &nbsp;|&nbsp;
+      <a href="${card.officialUrl}" target="_blank" rel="noopener" style="color:var(--teal-light);">Official Source ↗</a>
+    </div>
+
+    <div style="font-size:0.95rem;line-height:1.6;color:var(--text-dim);padding:12px 0;">
+      <strong style="color:var(--white);">Best for:</strong> ${card.bestFor}
+    </div>
+
+    <div class="modal-section-title">Key Figures</div>
+    <div class="modal-specs">
+      <div class="modal-spec">
+        <div class="modal-spec-label">Annual Fee</div>
+        <div class="modal-spec-value" style="color:${card.annualFee === 0 ? 'var(--teal-light)' : 'var(--white)'};">
+          ${card.annualFee === 0 ? 'Free' : 'AED ' + card.annualFee.toLocaleString()}
+        </div>
+      </div>
+      <div class="modal-spec">
+        <div class="modal-spec-label">Min. Monthly Salary</div>
+        <div class="modal-spec-value">AED ${card.minSalary.toLocaleString()}</div>
+      </div>
+      <div class="modal-spec">
+        <div class="modal-spec-label">Card Network</div>
+        <div class="modal-spec-value">${card.network} ${card.tier}</div>
+      </div>
+      ${card.loungeAccess ? `<div class="modal-spec">
+        <div class="modal-spec-label">Lounge Access</div>
+        <div class="modal-spec-value" style="color:var(--teal-light);">${typeof card.loungeVisits === 'number' ? card.loungeVisits + ' visits/yr' : card.loungeVisits}</div>
+      </div>` : ''}
+      ${card.travelInsurance ? `<div class="modal-spec">
+        <div class="modal-spec-label">Travel Insurance</div>
+        <div class="modal-spec-value" style="color:var(--teal-light);">✓ Included</div>
+      </div>` : ''}
+      ${card.islamicCard ? `<div class="modal-spec">
+        <div class="modal-spec-label">Card Type</div>
+        <div class="modal-spec-value" style="color:#4fe08c;">☪️ Islamic</div>
+      </div>` : ''}
+    </div>
+
+    ${card.welcomeBonus && card.welcomeBonus !== 'None' ? `
+    <div style="padding:15px;background:rgba(var(--gold-rgb),0.06);border:1px solid rgba(var(--gold-rgb),0.22);border-radius:10px;margin-bottom:16px;">
+      <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold-light);margin-bottom:4px;">🎁 Welcome Bonus</div>
+      <div style="font-size:0.875rem;color:var(--text);">${card.welcomeBonus}</div>
+    </div>` : ''}
+
+    <div class="modal-section-title">Benefits & Rewards</div>
+    <div class="modal-benefits">
+      ${card.keyBenefits.map(b => `
+        <div class="modal-benefit">
+          <span class="modal-benefit-icon">✓</span>
+          <span class="modal-benefit-text">${b}</span>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="modal-section-title">Pros & Cons</div>
+    <div class="pros-cons">
+      <div class="pros-box">
+        <div class="pros-cons-title">Pros</div>
+        <ul class="pros-cons-list">
+          ${card.keyBenefits.slice(0, 4).map(b => `<li>${b.substring(0, 60)}${b.length > 60 ? '…' : ''}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="cons-box">
+        <div class="pros-cons-title">Cons</div>
+        <ul class="pros-cons-list">
+          ${card.drawbacks.map(d => `<li>${d}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div class="modal-section-title">Fee Note</div>
+    <div style="font-size:0.875rem;color:var(--text-dim);">${card.annualFeeNote}</div>
+
+    <div class="modal-disclaimer">
+      <strong style="color:var(--gold-dim);">Important:</strong> Card details are provided for comparison only. Benefits, fees, and eligibility may change. Always verify current terms directly with ${card.bank} before applying. Approval is subject to the bank's credit assessment. Last verified: ${card.lastVerified}.
+    </div>
+
+    <div class="modal-cta">
+      <button class="modal-apply-btn" onclick="applyCard('${card.id}')">
+        Apply at ${card.bank}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+      </button>
+      <button class="modal-official-btn" onclick="window.open('${card.officialUrl}','_blank')">
+        Official Page ↗
+      </button>
+      <button class="modal-official-btn" onclick="toggleCompare('${card.id}'); this.textContent = '${inCompare ? '+ Compare' : '✓ Added'}'">
+        ${inCompare ? '✓ Added' : '+ Compare'}
+      </button>
+    </div>
+  `;
+
+  modal.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(event) {
+  if (!event || event.target === document.getElementById('cardModal')) {
+    document.getElementById('cardModal').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+function applyCard(id) {
+  const card = UAE_CARDS.find(c => c.id === id);
+  if (card) window.open(card.officialUrl, '_blank', 'noopener');
+}
+
+// ── FAQ ──
+const FAQS = [
+  { q: 'What is the minimum salary for a UAE credit card?', a: 'Most standard UAE credit cards require AED 5,000/month. Some entry-level and digital bank cards accept this. Premium cards may require AED 15,000–35,000. If your salary is below AED 5,000, a secured credit card (backed by a fixed deposit) is usually the only option.' },
+  { q: 'Which UAE credit card has the best cashback?', a: 'For dining and daily spending: Mashreq Cashback (5% dining, free) and Liv Cashback+ (6% dining, 5% fuel, 3% groceries, free). For groceries: Emirates NBD Lulu 247 (7% at LuLu). For school fees: CBD Super Saver (up to 10% on education). For flat-rate simplicity: Wio Credit Card (2% on everything).' },
+  { q: 'Which card is best for Emirates Skywards miles?', a: 'Emirates Islamic Skywards Black is the top-rated option (3.5 miles/USD on Emirates, instant Silver status, unlimited lounge, up to 75,000 welcome miles — requires AED 35,000 salary). For mid-range: HSBC Skywards Signature (AED 12,500 salary) or Emirates NBD Skywards Infinite.' },
+  { q: 'Which UAE cards have no annual fee?', a: 'Several: Mashreq Cashback, Liv Cashback+, Emirates NBD Lulu 247 Titanium, Mashreq noon, Wio Credit Card, ADIB Cashback Visa, FAB GEMS Titanium, DIB Prime Gold, Citi Simplicity, ENBD noon One, and ADCB Talabat are all free for life or free conditionally.' },
+  { q: 'Are there Islamic (Sharia-compliant) credit cards in UAE?', a: 'Yes. Emirates Islamic, ADIB, Dubai Islamic Bank (DIB), and FAB offer covered cards that are Sharia-compliant. Emirates Islamic Skywards Black, ADIB Cashback Visa, and ADIB Etihad Guest Infinite are popular options. These function identically to conventional cards but use murabaha or tawarruq structures instead of interest.' },
+  { q: 'Can I get a UAE credit card if I earn less than AED 5,000?', a: 'Standard unsecured credit cards typically require AED 5,000 minimum. If you earn less, options include: (1) secured credit card backed by a fixed deposit at banks like Mashreq, CBD, or NBF; (2) applying at the bank where your salary is credited, which may be more flexible. After 6–12 months of responsible use, some banks convert secured cards to standard cards.' },
+  { q: 'Can I compare UAE credit cards on CardGulf?', a: 'Yes — click the "Compare" button on any card to add it to your comparison. You can compare 2–4 cards side by side, with a full breakdown of fees, salary requirements, rewards, lounge access, travel insurance, and more. The comparison highlights the best card in each category.' },
+  { q: 'How does CardGulf rank and recommend cards?', a: 'Our matching algorithm scores cards across eligibility (salary), priority alignment (your stated preferences), fee preference, Islamic card requirement, travel frequency, and spending category overlap. No bank pays to be ranked first. All data is sourced from official UAE bank websites and verified regularly.' },
+];
+function renderFAQ() {
+  const list = document.getElementById('faqList');
+  list.innerHTML = FAQS.map((f, i) => `
+    <div class="faq-item" id="faq${i}">
+      <button class="faq-q" onclick="toggleFAQ(${i})" aria-expanded="false">
+        ${f.q}
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-a-wrap"><div class="faq-a-inner"><div class="faq-a">${f.a}</div></div></div>
+    </div>
+  `).join('');
+}
+
+function toggleFAQ(i) {
+  const el = document.getElementById('faq' + i);
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(f => {
+    f.classList.remove('open');
+    f.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+  });
+  if (!isOpen) {
+    el.classList.add('open');
+    el.querySelector('.faq-q').setAttribute('aria-expanded', 'true');
+  }
+}
+</script>
+</body>
+</html>
